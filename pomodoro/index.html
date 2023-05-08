@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Pomodoro Timer</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <!-- <h1>Pomodoro Timer</h1> -->
+    <div class="timer">
+        <svg class="timer-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <g class="timer-group">
+                <circle cx="50" cy="50" r="47" class="timer-circle-background" />
+                <circle cx="50" cy="50" r="45" class="timer-circle-outer" id="timer-circle-outer"
+                    stroke-dasharray="283" />
+                <circle cx="50" cy="50" r="40" class="timer-circle-accent" />
+                <circle cx="50" cy="50" r="40" class="timer-circle-primary" stroke-dasharray="209" />
+            </g>
+        </svg>
+        <div class="timer-label">
+            <div>
+                <!-- 現在時刻の表示 -->
+                <div id="current-time"></div>
+                <!-- 状態の表示 -->
+                <div id="status"></div>
+                <!-- ポモドーロタイマーの表示 -->
+                <div id="timer-label">25:00</div>
+                <!-- 作業の実行回数の表示 -->
+                <div id="counter"></div>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+
+</html>
