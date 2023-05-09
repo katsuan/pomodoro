@@ -1,6 +1,7 @@
 const timerDisplay = document.getElementById('timer');
 
 let timer;
+let audio;
 let isWorking = true;
 let params = getParameters();
 
