@@ -38,7 +38,7 @@ body {
     width: 3rem;
 }
 
-#current-time {
+#time-label {
     color: var(--color-second);
     font-size: 0.25rem;
 }
