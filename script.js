@@ -4,6 +4,11 @@ let timer;
 let isWorking = true;
 let params = getParameters();
 
+const soundSources = {
+    work: 'sound/学校のチャイム.mp3',
+    break: 'sound/「そこまで」.mp3'
+};
+
 function getParameters() {
     // 作業時間の設定
     return {
@@ -24,20 +29,20 @@ function zeroPadding(number, length) {
     return (Array(length).join("0") + number).slice(-length);
 }
 
-function showTime() {
+function calculateTimeText() {
     // 現在時刻を表示する
     const date = new Date();
     const month = date.getMonth() + 1;
     const day = date.getDate();
     const hours = date.getHours();
     const minutes = date.getMinutes();
-    const seconds = date.getSeconds() + 1;
-
-    const timeString = `${month}/${day} ${zeroPadding(hours, 2)}:${zeroPadding(minutes, 2)}`
-    // + ':' + zeroPadding(seconds, 2);
-    document.getElementById('current-time').innerHTML = timeString;
+    // const seconds = date.getSeconds() + 1;
+    return `${month}/${day} ` +
+        [
+            zeroPadding(hours, 2),
+            zeroPadding(minutes, 2),
+        ].join(":");
 }
-// setInterval(showTime, 1000); // 1秒毎にshowTime関数を実行する
 
 function switchToWork() {
     isWorking = true;
@@ -82,11 +87,10 @@ function calculateSessionText(parameters) {
     const interval = (parameters.work + parameters.break) / 2;
     const minutesInInterval = minutes % interval;
     const sessionNumber = Math.floor((date.getHours() - parameters.startHour) * 2 + (minutes / 30)) + 1;
+    console.log("処理実行")
     if (minutesInInterval < parameters.work) {
-        console.log('pomodoro');
         return `POMODORO #${sessionNumber}`;
     } else {
-        console.log('break');
         return `BREAK #${sessionNumber}`;
     }
 }
@@ -102,6 +106,9 @@ function calculateRemainingPathDashArray(parameters) {
 setInterval(function () {
     const parameters = getParameters();
 
+    const timeElement = document.getElementById("time-label");
+    timeElement.textContent = calculateTimeText();
+
     const timerElement = document.getElementById("timer-label");
     timerElement.textContent = calculateTimerText(parameters);
 
@@ -110,5 +117,4 @@ setInterval(function () {
 
     const remainingPathElement = document.getElementById("timer-circle-outer");
     remainingPathElement.setAttribute("stroke-dasharray", calculateRemainingPathDashArray(parameters));
-    showTime();
 }, 1000);
