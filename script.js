@@ -118,3 +118,9 @@ setInterval(function () {
     const remainingPathElement = document.getElementById("timer-circle-outer");
     remainingPathElement.setAttribute("stroke-dasharray", calculateRemainingPathDashArray(parameters));
 }, 1000);
+
+function playAudio(audio) {
+    audio.addEventListener('canplaythrough', function () {
+        audio.play();
+    });
+}
