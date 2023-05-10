@@ -4,7 +4,7 @@ function zeroPadding(number, length) {
 }
 
 function calculateClassName(parameters) {
-    // 現在がどの時間であるかを算出する。
+    // 現在がどの時間であるかを算出する
     const date = new Date();
     const minutes = date.getMinutes();
     const interval = parameters.work + parameters.break;
@@ -13,12 +13,17 @@ function calculateClassName(parameters) {
 }
 
 function calculateTimerText(parameters) {
+    // タイマーの表示を作成する
     const date = new Date();
     const minutes = date.getMinutes();
     const seconds = date.getSeconds();
     const remainingSeconds = 59 - seconds;
     const interval = parameters.work + parameters.break;
     const minutesInInterval = minutes % interval;
+    // const remainingMinutes =
+    //     (minutes < parameters.work ? parameters.work : interval) -
+    //     minutesInInterval -
+    //     1;
     const remainingMinutes =
         (minutes < parameters.work ? parameters.work - minutesInInterval : parameters.work + parameters.break - minutesInInterval - 1);
     return [
@@ -26,6 +31,7 @@ function calculateTimerText(parameters) {
         zeroPadding(remainingSeconds, 2),
     ].join(":");
 }
+
 
 function switchScene(parameters) {
     const date = new Date();
@@ -120,9 +126,9 @@ function calculateSessionText(parameters) {
     const minutesInInterval = minutes % interval;
     const sessionNumber = Math.floor(((date.getHours() - parameters.startHour) * 60 + minutes) / interval) + 1;
     if (minutesInInterval < parameters.work) {
-        return `work #${zeroPadding(sessionNumber, 2)}`;
+        return `pomodoro #${zeroPadding(sessionNumber, 2)}`;
     } else {
-        return `break #${zeroPadding(sessionNumber, 2)}`;
+        return `pomodoro #${zeroPadding(sessionNumber, 2)}`;
     }
 }
 
