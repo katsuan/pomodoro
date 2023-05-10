@@ -19,7 +19,7 @@ function calculateTimerText(parameters) {
     const seconds = date.getSeconds();
     const remainingSeconds = 59 - seconds;
     const interval = parameters.work + parameters.break;
-    const minutesInInterval = minutes % interval;
+    const minutesInInterval = (minutes % interval) || parameters.work;
     // const remainingMinutes =
     //     (minutes < parameters.work ? parameters.work : interval) -
     //     minutesInInterval -
@@ -32,8 +32,8 @@ function calculateTimerText(parameters) {
     ].join(":");
 }
 
-
 function switchScene(parameters) {
+    // WorkとBreakを切り替える
     const date = new Date();
     const minutes = date.getMinutes();
     const seconds = date.getSeconds();
@@ -52,7 +52,15 @@ function switchScene(parameters) {
 
 function displayState(parameters) {
     if (parameters.displayState) {
-        document.getElementById("state").textContent = document.getElementById("timer").className;
+        document.getElementById("state").textContent = document.getElementById("timer-label").className;
+        document.body.style.fontSize = "16vw";
+        document.body.style.flexDirection = 'column';
+    }
+}
+
+function displayCounter(parameters) {
+    if (parameters.displayCounter) {
+        document.getElementById("counter").textContent = document.getElementById("timer-label").className;
         document.body.style.fontSize = "16vw";
         document.body.style.flexDirection = 'column';
     }
@@ -63,7 +71,7 @@ function getParameters() {
     const params = new URL(window.location.href).searchParams;
     const breakString = params.get("break") || "5";
     const workString = params.get("work") || "25";
-    const displayStateString = params.get("displayState") || "0";
+    const displayStateString = params.get("displayState") || "1";
     const startHourString = params.get("start") || "9";
     return {
         break: parseInt(breakString, 10),
@@ -75,7 +83,7 @@ function getParameters() {
 
 setInterval(function () {
     const parameters = getParameters();
-    const element = document.getElementById("timer")
+    const element = document.getElementById("timer-label")
     element.textContent = calculateTimerText(parameters);
     element.className = calculateClassName(parameters);
 
@@ -110,7 +118,6 @@ function calculateTimeText() {
     const day = date.getDate();
     const hours = date.getHours();
     const minutes = date.getMinutes();
-    // const seconds = date.getSeconds() + 1;
     return `${month}/${day} ` +
         [
             zeroPadding(hours, 2),
@@ -124,11 +131,11 @@ function calculateSessionText(parameters) {
     const minutes = date.getMinutes();
     const interval = parameters.work + parameters.break;
     const minutesInInterval = minutes % interval;
-    const sessionNumber = Math.floor(((date.getHours() - parameters.startHour) * 60 + minutes) / interval) + 1;
+    const sessionCounter = Math.floor(((date.getHours() - parameters.startHour) * 60 + minutes) / interval) + 1;
     if (minutesInInterval < parameters.work) {
-        return `pomodoro #${zeroPadding(sessionNumber, 2)}`;
+        return `pomodoro #${zeroPadding(sessionCounter, 2)}`;
     } else {
-        return `pomodoro #${zeroPadding(sessionNumber, 2)}`;
+        return `breake #${zeroPadding(sessionCounter, 2)}`;
     }
 }
 
@@ -143,6 +150,7 @@ function calculateRemainingPathDashArray(parameters) {
 let soundOn = false;
 
 function toggleSound() {
+    // 音声の出力をトグルする
     soundOn = !soundOn;
     let soundBtn = document.getElementById("sound-btn");
     if (soundOn) {
