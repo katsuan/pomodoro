@@ -120,8 +120,7 @@ function calculateSessionText(parameters) {
     const minutes = date.getMinutes();
     const interval = (parameters.work + parameters.break) / 2;
     const minutesInInterval = minutes % interval;
-    const sessionNumber = Math.floor(
-        (date.getHours() - parameters.startHour) * 2 + (minutes / parameters.work + parameters.break)) + 1;
+    const sessionNumber = Math.floor(((date.getHours() - parameters.startHour) * 60 + minutes) / interval) + 1;
     if (minutesInInterval < parameters.work) {
         return `POMODORO #${zeroPadding(sessionNumber, 2)}`;
     } else {
