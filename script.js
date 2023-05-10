@@ -15,17 +15,21 @@ function calculateClassName(parameters) {
 function calculateTimerText(parameters) {
     // タイマーの表示を作成する
     const date = new Date();
-    const minutes = date.getMinutes();
-    const seconds = date.getSeconds();
-    const remainingSeconds = 59 - seconds;
+    const currentTime = date.getTime();
+    const startTime = new Date(date.getFullYear(), date.getMonth(), date.getDate(), parameters.startHour).getTime();
+    const elapsedTime = currentTime - startTime;
     const interval = parameters.work + parameters.break;
-    const minutesInInterval = (minutes % interval) || parameters.work;
-    // const remainingMinutes =
-    //     (minutes < parameters.work ? parameters.work : interval) -
-    //     minutesInInterval -
-    //     1;
-    const remainingMinutes =
-        (minutes < parameters.work ? parameters.work - minutesInInterval : parameters.work + parameters.break - minutesInInterval - 1);
+
+    let remainingTime;
+    if (elapsedTime % interval < parameters.work * 60 * 1000) {
+        remainingTime = (parameters.work * 60 * 1000) - (elapsedTime % interval);
+    } else {
+        remainingTime = (parameters.break * 60 * 1000) - (elapsedTime % interval - parameters.work * 60 * 1000);
+    }
+
+    const remainingMinutes = Math.floor(remainingTime / 1000 / 60);
+    const remainingSeconds = Math.floor((remainingTime / 1000) % 60);
+
     return [
         zeroPadding(remainingMinutes, 2),
         zeroPadding(remainingSeconds, 2),
@@ -135,7 +139,7 @@ function calculateSessionText(parameters) {
     if (minutesInInterval < parameters.work) {
         return `pomodoro #${zeroPadding(sessionCounter, 2)}`;
     } else {
-        return `breake #${zeroPadding(sessionCounter, 2)}`;
+        return `break #${zeroPadding(sessionCounter, 2)}`;
     }
 }
 
