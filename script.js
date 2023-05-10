@@ -11,22 +11,15 @@ function calculateClassName(parameters) {
     const minutesInInterval = minutes % interval;
     return minutesInInterval < parameters.work ? "work" : "break";
 }
-
 function calculateTimerText(parameters) {
     // タイマーの表示を作成する
     const date = new Date();
     const currentTime = date.getTime();
     const startTime = new Date(date.getFullYear(), date.getMonth(), date.getDate(), parameters.startHour).getTime();
     const elapsedTime = currentTime - startTime;
-    const interval = parameters.work + parameters.break;
+    const interval = parameters.work * 60 * 1000 + parameters.break * 60 * 1000;
 
-    let remainingTime;
-    if (elapsedTime % interval < parameters.work * 60 * 1000) {
-        remainingTime = (parameters.work * 60 * 1000) - (elapsedTime % interval);
-    } else {
-        remainingTime = (parameters.break * 60 * 1000) - (elapsedTime % interval - parameters.work * 60 * 1000);
-    }
-
+    const remainingTime = interval - (elapsedTime % interval);
     const remainingMinutes = Math.floor(remainingTime / 1000 / 60);
     const remainingSeconds = Math.floor((remainingTime / 1000) % 60);
 
