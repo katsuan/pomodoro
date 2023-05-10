@@ -20,15 +20,12 @@ function calculateTimerText(parameters) {
     const interval = parameters.work + parameters.break;
     const minutesInInterval = minutes % interval;
     const remainingMinutes =
-        (minutes < parameters.work ? parameters.work : interval) -
-        minutesInInterval -
-        1;
+        (minutes < parameters.work ? parameters.work - minutesInInterval : parameters.work + parameters.break - minutesInInterval - 1);
     return [
         zeroPadding(remainingMinutes, 2),
         zeroPadding(remainingSeconds, 2),
     ].join(":");
 }
-
 
 function switchScene(parameters) {
     const date = new Date();
@@ -116,9 +113,10 @@ function calculateTimeText() {
 }
 
 function calculateSessionText(parameters) {
+    // セッション番号を計算する
     const date = new Date();
     const minutes = date.getMinutes();
-    const interval = (parameters.work + parameters.break) / 2;
+    const interval = parameters.work + parameters.break;
     const minutesInInterval = minutes % interval;
     const sessionNumber = Math.floor(((date.getHours() - parameters.startHour) * 60 + minutes) / interval) + 1;
     if (minutesInInterval < parameters.work) {
