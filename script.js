@@ -164,11 +164,10 @@ function toggleSound() {
     soundOn = !soundOn;
     let soundBtn = document.getElementById("sound-btn");
     if (soundOn) {
-        alert("時報がなります。ボリュームに注意してください")
-        soundBtn.textContent = "play";
+        alert("時報がなります。ボリュームに注意してください");
+        soundBtn.style.display = "none";
     } else {
-        alert("時報をオフにしました。")
-        soundBtn.textContent = "Mute";
+        ;
     }
 }
 
