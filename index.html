@@ -1,11 +1,10 @@
 <head>
     <meta charset="UTF-8">
-    <title>Pomodoro Timer</title>
+    <title>PomodoroTimer</title>
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-    <!-- <h1>Pomodoro Timer</h1> -->
     <div class="timer">
         <svg class="timer-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
             <g class="timer-group">
@@ -18,11 +17,12 @@
         </svg>
         <div class="timer-label">
             <div>
-                <div id="time-label">現在時刻</div>
+                <div id="state"></div>
                 <div id="status">FocusTime</div>
-                <div id="timer-label">25:00</div>
-                <div id="counter">POMODORO</div>
-                <button id="chime-button">時報を鳴らす</button>
+                <div id="time-label">現在時刻</div>
+                <div id="timer">00:00</div>
+                <div id="counter">POMODORO #00</div>
+                <button id="sound-btn" onclick="toggleSound()">Mute</button>
             </div>
         </div>
     </div>
