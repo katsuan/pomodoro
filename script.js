@@ -23,9 +23,16 @@ function calculateTimerText(parameters) {
         parameters.startHour,
     );
     const elapsedTime = currentTime - startDateTime.getTime();
-    const interval = parameters.work * 60 * 1000 + parameters.break * 60 * 1000;
+    const interval = (parameters.work + parameters.break) * 60 * 1000;
 
-    const remainingTime = parameters.work * 60 * 1000 - (elapsedTime % interval);
+    let remainingTime;
+    const minutesInInterval = Math.floor((elapsedTime % interval) / 1000 / 60);
+    if (minutesInInterval < parameters.work) {
+        remainingTime = (parameters.work * 60 * 1000) - (elapsedTime % interval);
+    } else {
+        remainingTime = (interval) - (elapsedTime % interval);
+    }
+
     const remainingMinutes = Math.floor(remainingTime / 1000 / 60);
     const remainingSeconds = Math.floor((remainingTime / 1000) % 60);
 
