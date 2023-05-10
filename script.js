@@ -1,68 +1,15 @@
-const timerDisplay = document.getElementById('timer');
-
-let timer;
-let audio;
-let isWorking = true;
-let params = getParameters();
-
-const soundSources = {
-    work: 'sound/学校のチャイム.mp3',
-    break: 'sound/「そこまで」.mp3'
-};
-
-function getParameters() {
-    // 作業時間の設定
-    return {
-        break: 5,
-        work: 25,
-        startHour: 9,
-    };
-}
-
-function playSound(soundSource) {
-    // 音声を設定
-    const audio = new Audio(soundSource);
-    audio.play();
-}
-
 function zeroPadding(number, length) {
-    // 指定した桁数になるまで数値の前に0をつける関数
-    return (Array(length).join("0") + number).slice(-length);
+    // 指定の桁数まで数値の前に 0 をつける
+    return number.toString().padStart(length, "0");
 }
 
-function calculateTimeText() {
-    // 現在時刻を表示する
+function calculateClassName(parameters) {
+    // 現在がどの時間であるかを算出する。
     const date = new Date();
-    const month = date.getMonth() + 1;
-    const day = date.getDate();
-    const hours = date.getHours();
     const minutes = date.getMinutes();
-    // const seconds = date.getSeconds() + 1;
-    return `${month}/${day} ` +
-        [
-            zeroPadding(hours, 2),
-            zeroPadding(minutes, 2),
-        ].join(":");
-}
-
-function switchToWork() {
-    isWorking = true;
-    playSound('sound/学校のチャイム.mp3');
-    // clearInterval(timer);
-    timer = setInterval(countDown, 1000);
-    timerDisplay.classList.remove('break-time');
-    timerDisplay.classList.add('work-time');
-    document.getElementById('status').textContent = "作業中";
-}
-
-function switchToBreak() {
-    isWorking = false;
-    playSound('sound/「そこまで」.mp3');
-    // clearInterval(timer);
-    timer = setInterval(countDown, 1000);
-    timerDisplay.classList.remove('work-time');
-    timerDisplay.classList.add('break-time');
-    document.getElementById('status').textContent = "休憩中";
+    const interval = parameters.work + parameters.break;
+    const minutesInInterval = minutes % interval;
+    return minutesInInterval < parameters.work ? "work" : "break";
 }
 
 function calculateTimerText(parameters) {
@@ -82,17 +29,103 @@ function calculateTimerText(parameters) {
     ].join(":");
 }
 
+
+function switchScene(parameters) {
+    const date = new Date();
+    const minutes = date.getMinutes();
+    const seconds = date.getSeconds();
+    const interval = parameters.work + parameters.break;
+    const minutesInInterval = minutes % interval;
+    if (seconds === 0) {
+        if (minutesInInterval === 0) {
+            playSound('sound/学校のチャイム.mp3');
+            console.log('開始時間');
+        } else if (minutesInInterval === parameters.work) {
+            playSound('sound/「そこまで」.mp3');
+            console.log('終了時間');
+        }
+    }
+}
+
+function displayState(parameters) {
+    if (parameters.displayState) {
+        document.getElementById("state").textContent = document.getElementById("timer").className;
+        document.body.style.fontSize = "16vw";
+        document.body.style.flexDirection = 'column';
+    }
+}
+
+function getParameters() {
+    // パラメーターを定義する
+    const params = new URL(window.location.href).searchParams;
+    const breakString = params.get("break") || "5";
+    const workString = params.get("work") || "25";
+    const displayStateString = params.get("displayState") || "0";
+    const startHourString = params.get("start") || "9";
+    return {
+        break: parseInt(breakString, 10),
+        work: parseInt(workString, 10),
+        displayState: parseInt(displayStateString, 10),
+        startHour: parseInt(startHourString, 10),
+    };
+}
+
+setInterval(function () {
+    const parameters = getParameters();
+    const element = document.getElementById("timer")
+    element.textContent = calculateTimerText(parameters);
+    element.className = calculateClassName(parameters);
+
+    const timeElement = document.getElementById("time-label");
+    timeElement.textContent = calculateTimeText();
+
+    // const timerElement = document.getElementById("timer-label");
+    // timerElement.textContent = calculateTimerText(parameters);
+
+    const sessionElement = document.getElementById("counter");
+    sessionElement.textContent = calculateSessionText(parameters);
+
+    const remainingPathElement = document.getElementById("timer-circle-outer");
+    remainingPathElement.setAttribute("stroke-dasharray", calculateRemainingPathDashArray(parameters));
+
+    const statusElement = document.getElementById("status");
+    statusElement.textContent = displayParameters(parameters);
+
+    switchScene(parameters);
+
+    displayState(parameters);
+}, 1000);
+
+function displayParameters(parameters) {
+    return `work ${parameters.work} | break ${parameters.break}`;
+}
+
+function calculateTimeText() {
+    // 現在時刻を作成する
+    const date = new Date();
+    const month = date.getMonth() + 1;
+    const day = date.getDate();
+    const hours = date.getHours();
+    const minutes = date.getMinutes();
+    // const seconds = date.getSeconds() + 1;
+    return `${month}/${day} ` +
+        [
+            zeroPadding(hours, 2),
+            zeroPadding(minutes, 2),
+        ].join(":");
+}
+
 function calculateSessionText(parameters) {
     const date = new Date();
     const minutes = date.getMinutes();
     const interval = (parameters.work + parameters.break) / 2;
     const minutesInInterval = minutes % interval;
-    const sessionNumber = Math.floor((date.getHours() - parameters.startHour) * 2 + (minutes / 30)) + 1;
-    console.log("処理実行")
+    const sessionNumber = Math.floor(
+        (date.getHours() - parameters.startHour) * 2 + (minutes / parameters.work + parameters.break)) + 1;
     if (minutesInInterval < parameters.work) {
-        return `POMODORO #${sessionNumber}`;
+        return `POMODORO #${zeroPadding(sessionNumber, 2)}`;
     } else {
-        return `BREAK #${sessionNumber}`;
+        return `BREAK #${zeroPadding(sessionNumber, 2)}`;
     }
 }
 
@@ -104,24 +137,22 @@ function calculateRemainingPathDashArray(parameters) {
     return `${283 * minutesInInterval / interval} 283`;
 }
 
-setInterval(function () {
-    const parameters = getParameters();
+let soundOn = false;
 
-    const timeElement = document.getElementById("time-label");
-    timeElement.textContent = calculateTimeText();
+function toggleSound() {
+    soundOn = !soundOn;
+    let soundBtn = document.getElementById("sound-btn");
+    if (soundOn) {
+        alert("時報がなります。ボリュームに注意してください")
+        soundBtn.textContent = "play";
+    } else {
+        alert("時報をオフにしました。")
+        soundBtn.textContent = "Mute";
+    }
+}
 
-    const timerElement = document.getElementById("timer-label");
-    timerElement.textContent = calculateTimerText(parameters);
-
-    const sessionElement = document.getElementById("counter");
-    sessionElement.textContent = calculateSessionText(parameters);
-
-    const remainingPathElement = document.getElementById("timer-circle-outer");
-    remainingPathElement.setAttribute("stroke-dasharray", calculateRemainingPathDashArray(parameters));
-}, 1000);
-
-function playAudio(audio) {
-    audio.addEventListener('canplaythrough', function () {
-        audio.play();
-    });
+function playSound(source) {
+    // オーディオファイルのURLを指定する
+    const audio = new Audio(source);
+    audio.play();
 }
