@@ -68,6 +68,13 @@ function displayState(parameters) {
     }
 }
 
+function displayBtn(parameters) {
+    if (parameters.displayBtn) {
+        let soundBtn = document.getElementById("sound-btn");
+        soundBtn.style.display = "none";
+    }
+}
+
 function displayCounter(parameters) {
     if (parameters.displayCounter) {
         document.getElementById("counter").textContent = document.getElementById("timer-label").className;
@@ -83,11 +90,13 @@ function getParameters() {
     const workString = params.get("work") || "25";
     const displayStateString = params.get("displayState") || "1";
     const startHourString = params.get("start") || "9";
+    const displayBtn = params.get("btn") || "0";
     return {
         break: parseInt(breakString, 10),
         work: parseInt(workString, 10),
         displayState: parseInt(displayStateString, 10),
         startHour: parseInt(startHourString, 10),
+        displayBtn: parseInt(displayBtn, 10),
     };
 }
 
@@ -115,6 +124,8 @@ setInterval(function () {
     switchScene(parameters);
 
     displayState(parameters);
+
+    displayBtn(parameters);
 }, 1000);
 
 function displayParameters(parameters) {
