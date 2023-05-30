@@ -176,14 +176,16 @@ function toggleSound() {
     let soundBtn = document.getElementById("sound-btn");
     if (soundOn) {
         alert("時報がなります。ボリュームに注意してください");
-        soundBtn.style.display = "none";
+        soundBtn.textContent = "音声オフ";
     } else {
-        ;
+        soundBtn.textContent = "音声オン";
     }
 }
 
 function playSound(source) {
-    // オーディオファイルのURLを指定する
-    const audio = new Audio(source);
-    audio.play();
+    if (soundOn) {
+        // オーディオファイルのURLを指定する
+        const audio = new Audio(source);
+        audio.play();
+    }
 }
