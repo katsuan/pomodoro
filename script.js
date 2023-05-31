@@ -49,12 +49,14 @@ function switchScene(parameters) {
     const seconds = date.getSeconds();
     const interval = parameters.work + parameters.break;
     const minutesInInterval = minutes % interval;
-    if (seconds === 0) {
+    if (seconds === 0 || seconds === 30) {
+        let volumeSlider = document.getElementById('volume-slider');
+        let value = volumeSlider.value;
         if (minutesInInterval === 0) {
-            playSound('sound/学校のチャイム.mp3');
+            playSound('sound/学校のチャイム.mp3', value);
             console.log('開始時間');
         } else if (minutesInInterval === parameters.work) {
-            playSound('sound/「そこまで」.mp3');
+            playSound('sound/「そこまで」.mp3', value);
             console.log('終了時間');
         }
     }
@@ -182,10 +184,11 @@ function toggleSound() {
     }
 }
 
-function playSound(source) {
+function playSound(source, volume) {
     if (soundOn) {
         // オーディオファイルのURLを指定する
         const audio = new Audio(source);
+        audio.volume = volume;
         audio.play();
     }
 }
