@@ -49,7 +49,7 @@ function switchScene(parameters) {
     const seconds = date.getSeconds();
     const interval = parameters.work + parameters.break;
     const minutesInInterval = minutes % interval;
-    if (seconds === 0 || seconds === 30) {
+    if (seconds === 0) {
         let volumeSlider = document.getElementById('volume-slider');
         let value = volumeSlider.value;
         if (minutesInInterval === 0) {
