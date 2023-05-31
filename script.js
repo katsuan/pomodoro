@@ -118,7 +118,6 @@ setInterval(function () {
 
     displayState(parameters);
 
-    displayBtn(parameters);
 }, 1000);
 
 function displayParameters(parameters) {
