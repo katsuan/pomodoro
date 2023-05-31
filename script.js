@@ -170,25 +170,9 @@ function calculateRemainingPathDashArray(parameters) {
     return `${283 * minutesInInterval / interval} 283`;
 }
 
-let soundOn = false;
-
-function toggleSound() {
-    // 音声の出力をトグルする
-    soundOn = !soundOn;
-    let soundBtn = document.getElementById("sound-btn");
-    if (soundOn) {
-        alert("時報がなります。ボリュームに注意してください");
-        soundBtn.textContent = "音声オフ";
-    } else {
-        soundBtn.textContent = "音声オン";
-    }
-}
-
 function playSound(source, volume) {
-    if (soundOn) {
-        // オーディオファイルのURLを指定する
-        const audio = new Audio(source);
-        audio.volume = volume;
-        audio.play();
-    }
+    // オーディオファイルのURLを指定する
+    const audio = new Audio(source);
+    audio.volume = volume;
+    audio.play();
 }
