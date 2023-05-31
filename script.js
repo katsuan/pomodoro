@@ -160,9 +160,7 @@ function calculateRemainingPathDashArray(parameters) {
 }
 
 function playSound(source, volume) {
-    console.log(volume);
     if (volume !== '0') {
-        console.log('★');
         // オーディオファイルのURLを指定する
         const audio = new Audio(source);
         audio.volume = volume;
