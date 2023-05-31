@@ -50,13 +50,12 @@ function switchScene(parameters) {
     const interval = parameters.work + parameters.break;
     const minutesInInterval = minutes % interval;
     if (seconds === 0) {
-        let volumeSlider = document.getElementById('volume-slider');
-        let value = volumeSlider.value;
+        let volumeSlider = document.getElementById('volume-slider').value;
         if (minutesInInterval === 0) {
-            playSound('sound/学校のチャイム.mp3', value);
+            playSound('sound/学校のチャイム.mp3', volumeSlider);
             console.log('開始時間');
         } else if (minutesInInterval === parameters.work) {
-            playSound('sound/「そこまで」.mp3', value);
+            playSound('sound/「そこまで」.mp3', volumeSlider);
             console.log('終了時間');
         }
     }
@@ -161,8 +160,12 @@ function calculateRemainingPathDashArray(parameters) {
 }
 
 function playSound(source, volume) {
-    // オーディオファイルのURLを指定する
-    const audio = new Audio(source);
-    audio.volume = volume;
-    audio.play();
+    console.log(volume);
+    if (volume !== '0') {
+        console.log('★');
+        // オーディオファイルのURLを指定する
+        const audio = new Audio(source);
+        audio.volume = volume;
+        audio.play();
+    }
 }
