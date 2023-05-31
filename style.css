@@ -107,3 +107,16 @@ body {
     transform: rotate(-90deg);
     transform-origin: center;
 }
+
+/* オーディオ調整バーのスタイル */
+input[type="range"] {
+    -webkit-appearance: none;
+    /* 🚩これ無しだとスタイルがほぼ全く反映されないので注意 */
+    appearance: none;
+    accent-color: var(--color-second);
+    cursor: pointer;
+    outline: none;
+    height: 14px;
+    border-radius: 10px;
+    border: solid 3px var(--color-accent);
+}
