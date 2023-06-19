@@ -86,11 +86,15 @@ body {
 }
 
 .timer-circle-accent {
+    stroke-width: 4;
+    stroke-linecap: round;
     stroke: var(--color-accent);
 }
 
-.timer-circle-primary {
-    stroke: var(--color-primary);
+.timer-circle-base {
+    stroke-linecap: round;
+    stroke-width: 4;
+    stroke: var(--color-base);
 }
 
 .timer-label {
@@ -103,10 +107,10 @@ body {
     width: 3rem;
 }
 
-.timer-circle-outer {
-    stroke: var(--color-base);
+.timer-circle-inner {
+    stroke: var(--color-primary);
     stroke-linecap: round;
-    stroke-width: 4;
+    stroke-width: 3;
     transition: 0.5s linear all;
 }
 

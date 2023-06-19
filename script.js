@@ -107,8 +107,8 @@ setInterval(function () {
     const sessionElement = document.getElementById("counter");
     sessionElement.textContent = calculateSessionText(parameters);
 
-    const remainingPathElement = document.getElementById("timer-circle-outer");
-    remainingPathElement.setAttribute("stroke-dasharray", calculateRemainingPathDashArray(parameters));
+    const remainingPathElement = document.getElementById("timer-circle-inner");
+    remainingPathElement.setAttribute("stroke-dasharray", calculateRemainingPathDashArray(parameters, remainingPathElement.getAttribute("r")));
 
     const statusElement = document.getElementById("status");
     statusElement.textContent = displayParameters(parameters);
@@ -151,12 +151,20 @@ function calculateSessionText(parameters) {
     }
 }
 
-function calculateRemainingPathDashArray(parameters) {
+function calculateRemainingPathDashArray(parameters, r) {
+    const frame = Math.round(2 * r * Math.PI)
     const date = new Date();
     const minutes = date.getMinutes();
     const interval = parameters.work + parameters.break;
     const minutesInInterval = minutes % interval;
-    return `${283 * minutesInInterval / interval} 283`;
+    return `${frame * minutesInInterval / interval} ${frame}`;
+}
+
+function calculateRemainingPathDashArray2(parameters, r) {
+    const frame = Math.round(2 * r * Math.PI)
+    const interval = parameters.work + parameters.break;
+    const work = parameters.work;
+    return `${frame * work / interval} ${frame}`;
 }
 
 function playSound(source, volume) {
@@ -167,3 +175,6 @@ function playSound(source, volume) {
         audio.play();
     }
 }
+
+const remainingPathElement2 = document.getElementById("timer-circle-base");
+remainingPathElement2.setAttribute("stroke-dasharray", calculateRemainingPathDashArray2(getParameters(), remainingPathElement2.getAttribute("r")));
