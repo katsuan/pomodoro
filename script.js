@@ -108,7 +108,12 @@ setInterval(function () {
     sessionElement.textContent = calculateSessionText(parameters);
 
     const remainingPathElement = document.getElementById("timer-circle-outer");
-    remainingPathElement.setAttribute("stroke-dasharray", calculateRemainingPathDashArray(parameters));
+    const remainingPathElement_r = remainingPathElement.getAttribute("r");
+    remainingPathElement.setAttribute("stroke-dasharray", calculateRemainingPathDashArray(parameters,remainingPathElement_r));
+
+    const remainingPathElement2 = document.getElementById("timer-circle-primary");
+    const remainingPathElement2_r = remainingPathElement2.getAttribute("r");
+    remainingPathElement2.setAttribute("stroke-dasharray", calculateRemainingPathDashArray2(parameters,remainingPathElement2_r));
 
     const statusElement = document.getElementById("status");
     statusElement.textContent = displayParameters(parameters);
@@ -151,12 +156,20 @@ function calculateSessionText(parameters) {
     }
 }
 
-function calculateRemainingPathDashArray(parameters) {
+function calculateRemainingPathDashArray(parameters,r) {
     const date = new Date();
     const minutes = date.getMinutes();
     const interval = parameters.work + parameters.break;
     const minutesInInterval = minutes % interval;
-    return `${283 * minutesInInterval / interval} 283`;
+    let circumferencePx = Math.round(2 * r * Math.PI);
+    return `${circumferencePx * minutesInInterval / interval} ${circumferencePx}`;
+}
+
+function calculateRemainingPathDashArray2(parameters,r) {
+    const all = parameters.work + parameters.break;//円全体
+    const workPercentage = parameters.work / all;//全体のうちのwork(黄色)の割合
+    let circumferencePx = Math.round(2 * r * Math.PI);//円周のピクセル数
+    return `${circumferencePx *  workPercentage} ${circumferencePx}`;
 }
 
 function playSound(source, volume) {
