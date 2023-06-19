@@ -76,7 +76,7 @@ body {
 
 .work {
     color: var(--color-primary);
-    -webkit-text-stroke: 0.4vw var(--color-base);
+    -webkit-text-stroke: 0.02rem var(--color-base);
 }
 
 /* タイマーの外枠スタイル */
@@ -93,7 +93,7 @@ body {
 
 .timer-circle-base {
     stroke-linecap: round;
-    stroke-width: 4;
+    stroke-width: 5;
     stroke: var(--color-base);
 }
 
@@ -112,6 +112,7 @@ body {
     stroke-linecap: round;
     stroke-width: 3;
     transition: 0.5s linear all;
+    opacity: 0.9;
 }
 
 .timer-svg {
