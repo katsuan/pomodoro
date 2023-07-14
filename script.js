@@ -1,8 +1,10 @@
 function zeroPadding(number, length) {
+    // 指定桁まで 0 を追加
     return number.toString().padStart(length, "0");
 }
 
 function calculateClassName(parameters) {
+    // 現在時間の算出
     const date = new Date();
     const minutes = date.getMinutes();
     const interval = parameters.work + parameters.break;
@@ -11,6 +13,7 @@ function calculateClassName(parameters) {
 }
 
 function calculateTimerText(parameters) {
+    // タイマー表示の作成
     const date = new Date();
     const currentTime = date.getTime();
     const startDateTime = new Date(
@@ -40,6 +43,7 @@ function calculateTimerText(parameters) {
 }
 
 function switchScene(parameters) {
+    // Work と Break の切替
     const date = new Date();
     const minutes = date.getMinutes();
     const seconds = date.getSeconds();
@@ -75,18 +79,38 @@ function displayCounter(parameters) {
     }
 }
 
+function displayVolume(parameters) {
+    if (parameters.displayVolume) {
+        const volumeSlider = document.getElementById("volume-slider");
+        document.getElementById("state").textContent = volumeSlider.className;
+        document.body.style.fontSize = "16vw";
+        document.body.style.flexDirection = "column";
+    }
+}
+
 function getParameters() {
+    // パラメーターを定義
     const params = new URL(window.location.href).searchParams;
     const breakString = params.get("break") || "5";
     const workString = params.get("work") || "25";
     const displayStateString = params.get("displayState") || "1";
     const startHourString = params.get("start") || "9";
+    const volumeString = params.get("slider") || "1";
     return {
         break: parseInt(breakString, 10),
         work: parseInt(workString, 10),
         displayState: parseInt(displayStateString, 10),
         startHour: parseInt(startHourString, 10),
+        volumeSlider: parseInt(volumeString, 10),
     };
+}
+// HTMLで非表示にする範囲を取得
+const volumeSliderRange = document.getElementById("volume");
+// パラメーターを取得
+const parameters = getParameters();
+// sliderの値が0の場合に範囲を非表示にする
+if (parameters.volumeSlider === 0) {
+    volumeSliderRange.style.display = "none";
 }
 
 function updateTimer() {
@@ -110,6 +134,7 @@ function updateTimer() {
 
     switchScene(parameters);
     displayState(parameters);
+    displayVolume(parameters);
 }
 
 setInterval(updateTimer, 1000);
