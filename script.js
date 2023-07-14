@@ -1,10 +1,8 @@
 function zeroPadding(number, length) {
-    // 指定の桁数まで数値の前に 0 をつける
     return number.toString().padStart(length, "0");
 }
 
 function calculateClassName(parameters) {
-    // 現在がどの時間であるかを算出する
     const date = new Date();
     const minutes = date.getMinutes();
     const interval = parameters.work + parameters.break;
@@ -13,14 +11,13 @@ function calculateClassName(parameters) {
 }
 
 function calculateTimerText(parameters) {
-    // タイマーの表示を作成する
     const date = new Date();
     const currentTime = date.getTime();
     const startDateTime = new Date(
         date.getFullYear(),
         date.getMonth(),
         date.getDate(),
-        parameters.startHour,
+        parameters.startHour
     );
     const elapsedTime = currentTime - startDateTime.getTime();
     const interval = (parameters.work + parameters.break) * 60 * 1000;
@@ -28,57 +25,57 @@ function calculateTimerText(parameters) {
     let remainingTime;
     const minutesInInterval = Math.floor((elapsedTime % interval) / 1000 / 60);
     if (minutesInInterval < parameters.work) {
-        remainingTime = (parameters.work * 60 * 1000) - (elapsedTime % interval);
+        remainingTime = parameters.work * 60 * 1000 - (elapsedTime % interval);
     } else {
-        remainingTime = (interval) - (elapsedTime % interval);
+        remainingTime = interval - (elapsedTime % interval);
     }
 
     const remainingMinutes = Math.floor(remainingTime / 1000 / 60);
     const remainingSeconds = Math.floor((remainingTime / 1000) % 60);
 
-    return [
-        zeroPadding(remainingMinutes, 2),
-        zeroPadding(remainingSeconds, 2),
-    ].join(":");
+    return `${zeroPadding(remainingMinutes, 2)}:${zeroPadding(
+        remainingSeconds,
+        2
+    )}`;
 }
 
 function switchScene(parameters) {
-    // WorkとBreakを切り替える
     const date = new Date();
     const minutes = date.getMinutes();
     const seconds = date.getSeconds();
     const interval = parameters.work + parameters.break;
     const minutesInInterval = minutes % interval;
     if (seconds === 0) {
-        let volumeSlider = document.getElementById('volume-slider').value;
+        const volumeSlider = document.getElementById("volume-slider").value;
         if (minutesInInterval === 0) {
-            playSound('sound/学校のチャイム.mp3', volumeSlider);
-            console.log('開始時間');
+            playSound("sound/学校のチャイム.mp3", volumeSlider);
+            console.log("開始時間");
         } else if (minutesInInterval === parameters.work) {
-            playSound('sound/「そこまで」.mp3', volumeSlider);
-            console.log('終了時間');
+            playSound("sound/「そこまで」.mp3", volumeSlider);
+            console.log("終了時間");
         }
     }
 }
 
 function displayState(parameters) {
     if (parameters.displayState) {
-        document.getElementById("state").textContent = document.getElementById("timer-label").className;
+        const timerLabel = document.getElementById("timer-label");
+        document.getElementById("state").textContent = timerLabel.className;
         document.body.style.fontSize = "16vw";
-        document.body.style.flexDirection = 'column';
+        document.body.style.flexDirection = "column";
     }
 }
 
 function displayCounter(parameters) {
     if (parameters.displayCounter) {
-        document.getElementById("counter").textContent = document.getElementById("timer-label").className;
+        const timerLabel = document.getElementById("timer-label");
+        document.getElementById("counter").textContent = timerLabel.className;
         document.body.style.fontSize = "16vw";
-        document.body.style.flexDirection = 'column';
+        document.body.style.flexDirection = "column";
     }
 }
 
 function getParameters() {
-    // パラメーターを定義する
     const params = new URL(window.location.href).searchParams;
     const breakString = params.get("break") || "5";
     const workString = params.get("work") || "25";
@@ -92,58 +89,51 @@ function getParameters() {
     };
 }
 
-setInterval(function () {
+function updateTimer() {
     const parameters = getParameters();
-    const element = document.getElementById("timer-label")
-    element.textContent = calculateTimerText(parameters);
-    element.className = calculateClassName(parameters);
+    const timerLabel = document.getElementById("timer-label");
+    const timeLabel = document.getElementById("time-label");
+    const counter = document.getElementById("counter");
+    const timerCircleInner = document.getElementById("timer-circle-inner");
+    const status = document.getElementById("status");
+    const timerCircleBase = document.getElementById("timer-circle-base");
 
-    const timeElement = document.getElementById("time-label");
-    timeElement.textContent = calculateTimeText();
-
-    // const timerElement = document.getElementById("timer-label");
-    // timerElement.textContent = calculateTimerText(parameters);
-
-    const sessionElement = document.getElementById("counter");
-    sessionElement.textContent = calculateSessionText(parameters);
-
-    const remainingPathElement = document.getElementById("timer-circle-inner");
-    remainingPathElement.setAttribute("stroke-dasharray", calculateRemainingPathDashArray(parameters, remainingPathElement.getAttribute("r")));
-
-    const statusElement = document.getElementById("status");
-    statusElement.textContent = displayParameters(parameters);
+    timerLabel.textContent = calculateTimerText(parameters);
+    timerLabel.className = calculateClassName(parameters);
+    timeLabel.textContent = calculateTimeText();
+    counter.textContent = calculateSessionText(parameters);
+    timerCircleInner.setAttribute(
+        "stroke-dasharray",
+        calculateRemainingPathDashArray(parameters, timerCircleInner.getAttribute("r"))
+    );
+    status.textContent = displayParameters(parameters);
 
     switchScene(parameters);
-
     displayState(parameters);
+}
 
-}, 1000);
+setInterval(updateTimer, 1000);
 
 function displayParameters(parameters) {
     return `work ${parameters.work} | break ${parameters.break}`;
 }
 
 function calculateTimeText() {
-    // 現在時刻を作成する
     const date = new Date();
     const month = date.getMonth() + 1;
     const day = date.getDate();
     const hours = date.getHours();
     const minutes = date.getMinutes();
-    return `${month}/${day} ` +
-        [
-            zeroPadding(hours, 2),
-            zeroPadding(minutes, 2),
-        ].join(":");
+    return `${month}/${day} ${zeroPadding(hours, 2)}:${zeroPadding(minutes, 2)}`;
 }
 
 function calculateSessionText(parameters) {
-    // セッション番号を計算する
     const date = new Date();
     const minutes = date.getMinutes();
     const interval = parameters.work + parameters.break;
     const minutesInInterval = minutes % interval;
-    const sessionCounter = Math.floor(((date.getHours() - parameters.startHour) * 60 + minutes) / interval) + 1;
+    const sessionCounter =
+        Math.floor(((date.getHours() - parameters.startHour) * 60 + minutes) / interval) + 1;
     if (minutesInInterval < parameters.work) {
         return `pomodoro #${zeroPadding(sessionCounter, 2)}`;
     } else {
@@ -152,29 +142,31 @@ function calculateSessionText(parameters) {
 }
 
 function calculateRemainingPathDashArray(parameters, r) {
-    const frame = Math.round(2 * r * Math.PI)
+    const frame = Math.round(2 * r * Math.PI);
     const date = new Date();
     const minutes = date.getMinutes();
     const interval = parameters.work + parameters.break;
     const minutesInInterval = minutes % interval;
-    return `${frame * minutesInInterval / interval} ${frame}`;
+    return `${(frame * minutesInInterval) / interval} ${frame}`;
 }
 
 function calculateRemainingPathDashArray2(parameters, r) {
-    const frame = Math.round(2 * r * Math.PI)
+    const frame = Math.round(2 * r * Math.PI);
     const interval = parameters.work + parameters.break;
     const work = parameters.work;
-    return `${frame * work / interval} ${frame}`;
+    return `${(frame * work) / interval} ${frame}`;
 }
 
 function playSound(source, volume) {
-    if (volume !== '0') {
-        // オーディオファイルのURLを指定する
+    if (volume !== "0") {
         const audio = new Audio(source);
         audio.volume = volume;
         audio.play();
     }
 }
 
-const remainingPathElement2 = document.getElementById("timer-circle-base");
-remainingPathElement2.setAttribute("stroke-dasharray", calculateRemainingPathDashArray2(getParameters(), remainingPathElement2.getAttribute("r")));
+const timerCircleBase = document.getElementById("timer-circle-base");
+timerCircleBase.setAttribute(
+    "stroke-dasharray",
+    calculateRemainingPathDashArray2(getParameters(), timerCircleBase.getAttribute("r"))
+);
