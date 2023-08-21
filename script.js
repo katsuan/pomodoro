@@ -5,6 +5,7 @@ function getParameters() {
     const workString = params.get("work") || "25";
     const startHourString = params.get("start") || "9";
     const stateString = params.get("state") || "1";
+    const counterString = params.get("counter") || "1";
     const volumeString = params.get("vol") || "1";
     const outsideString = params.get("outside") || "1";
     return {
@@ -12,6 +13,7 @@ function getParameters() {
         work: parseInt(workString, 10),
         startHour: parseInt(startHourString, 10),
         displayState: parseInt(stateString, 10),
+        displayCounter: parseInt(counterString, 10),
         displayVolume: parseInt(volumeString, 10),
         displayOutside: parseInt(outsideString, 10),
     };
@@ -119,6 +121,11 @@ function hideRange(rangeList) {
         const rangeElement = document.getElementById(rangeId);
         rangeElement.style.display = "none";
     });
+}
+
+if (parameters.displayCounter === 0) {
+    const range = ["counter"]
+    hideRange(range);
 }
 
 if (parameters.displayVolume === 0) {
