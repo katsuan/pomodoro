@@ -1,14 +1,14 @@
 function getParameters() {
     // URLパラメーターを定義
     const defaultValues = {
-        break: 5,
-        work: 25,
-        startHour: 9,
-        displayDate: 1,
-        displayState: 1,
-        displayVolume: 1,
-        displayOutside: 1,
-        displayCounter: 1,
+        "break": 5,
+        "work": 25,
+        "startHour": 9,
+        "displayDate": 1,
+        "displayState": 1,
+        "displayVolume": 1,
+        "displayOutside": 1,
+        "displayCounter": 1,
     };
 
     const params = new URL(window.location.href).searchParams;
@@ -40,7 +40,6 @@ function calculateClassName(parameters) {
     // 現在時間のステータス算出
     const date = new Date();
     console.log(date);
-
     const minutes = date.getMinutes();
     const interval = parameters.work + parameters.break;
     const minutesInInterval = minutes % interval;
@@ -51,7 +50,6 @@ function calculateTimerText(parameters) {
     // タイマー表示の作成
     const date = new Date();
     console.log(date);
-
     const currentTime = date.getTime();
     const startDateTime = new Date(
         date.getFullYear(),
@@ -80,7 +78,6 @@ function switchScene(parameters) {
     // Work と Break の切替
     const date = new Date();
     console.log(date);
-
     const minutes = date.getMinutes();
     const seconds = date.getSeconds();
     const interval = parameters.work + parameters.break;
@@ -201,7 +198,6 @@ function calculateTimeText() {
 function calculateSessionText(parameters) {
     const date = new Date();
     console.log(date);
-
     const minutes = date.getMinutes();
     const interval = parameters.work + parameters.break;
     const minutesInInterval = minutes % interval;
@@ -219,7 +215,6 @@ function calculateRemainingPathDashArray(parameters, r) {
     const frame = Math.round(2 * r * Math.PI);
     const date = new Date();
     console.log(date);
-
     const minutes = date.getMinutes();
     const interval = parameters.work + parameters.break;
     const minutesInInterval = minutes % interval;
