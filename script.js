@@ -4,6 +4,7 @@ function getParameters() {
         break: 5,
         work: 25,
         startHour: 9,
+        displayDate: 1,
         displayState: 1,
         displayVolume: 1,
         displayOutside: 1,
@@ -20,6 +21,7 @@ function getParameters() {
         break: parseParam("break"),
         work: parseParam("work"),
         startHour: parseParam("start"),
+        displayDate: parseParam("date"),
         displayState: parseParam("state"),
         displayVolume: parseParam("vol"),
         displayOutside: parseParam("outside"),
@@ -131,6 +133,11 @@ function hideRange(rangeList) {
     });
 }
 
+if (parameters.displayDate === 0) {
+    const range = ["time-label"]
+    hideRange(range);
+}
+
 if (parameters.displayVolume === 0) {
     const range = ["volume"]
     hideRange(range);
@@ -138,6 +145,11 @@ if (parameters.displayVolume === 0) {
 
 if (parameters.displayOutside === 0) {
     const range = ["outside", "counter", "time-label"];
+    hideRange(range);
+}
+
+if (parameters.displayCounter === 0) {
+    const range = ["counter"];
     hideRange(range);
 }
 
@@ -188,7 +200,7 @@ function calculateSessionText(parameters) {
     let sessionCounter =
         Math.floor(((date.getHours() - parameters.startHour) * 60 + minutes) / interval) + 1;
     if (sessionCounter < 0) {
-        sessionCounter = 0
+        sessionCounter = Math.floor(((date.getHours() + parameters.startHour) * 60 + minutes) / interval) + 1;
     }
     const sessionType = minutesInInterval < parameters.work ? "pomodoro" : "break";
 
