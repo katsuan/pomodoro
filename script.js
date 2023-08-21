@@ -96,22 +96,36 @@ function getParameters() {
     const displayStateString = params.get("displayState") || "1";
     const startHourString = params.get("start") || "9";
     const volumeString = params.get("slider") || "1";
+    const outsideString = params.get("outside") || "1";
     return {
         break: parseInt(breakString, 10),
         work: parseInt(workString, 10),
         displayState: parseInt(displayStateString, 10),
         startHour: parseInt(startHourString, 10),
         volumeSlider: parseInt(volumeString, 10),
+        outsideDisplay: parseInt(outsideString, 10),
     };
 }
-// HTMLで非表示にする範囲を取得
-const volumeSliderRange = document.getElementById("volume");
 // パラメーターを取得
 const parameters = getParameters();
 // sliderの値が0の場合に範囲を非表示にする
 if (parameters.volumeSlider === 0) {
+    // HTMLで非表示にする範囲を取得
+    const volumeSliderRange = document.getElementById("volume");
     volumeSliderRange.style.display = "none";
 }
+
+// sliderの値が0の場合に範囲を非表示にする
+if (parameters.outsideDisplay === 0) {
+    // HTMLで非表示にする範囲を取得
+    const outsideRange = document.getElementById("outside");
+    outsideRange.style.display = "none";
+    const pomodoroRange = document.getElementById("counter");
+    pomodoroRange.style.display = "none"
+    const timeRange = document.getElementById("time-label");
+    timeRange.style.display = "none"
+}
+
 
 function updateTimer() {
     const parameters = getParameters();
