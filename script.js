@@ -4,14 +4,14 @@ function getParameters() {
     const breakString = params.get("break") || "5";
     const workString = params.get("work") || "25";
     const startHourString = params.get("start") || "9";
-    const displayStateString = params.get("displayState") || "1";
+    const stateString = params.get("state") || "1";
     const volumeString = params.get("slider") || "1";
     const outsideString = params.get("outside") || "1";
     return {
         break: parseInt(breakString, 10),
         work: parseInt(workString, 10),
         startHour: parseInt(startHourString, 10),
-        displayState: parseInt(displayStateString, 10),
+        displayState: parseInt(stateString, 10),
         volumeSlider: parseInt(volumeString, 10),
         displayOutside: parseInt(outsideString, 10),
     };
@@ -25,7 +25,7 @@ function zeroPadding(number, length) {
 }
 
 function calculateClassName(parameters) {
-    // 現在時間の算出
+    // 現在時間のステータス算出
     const date = new Date();
     const minutes = date.getMinutes();
     const interval = parameters.work + parameters.break;
@@ -57,10 +57,7 @@ function calculateTimerText(parameters) {
     const remainingMinutes = Math.floor(remainingTime / 1000 / 60);
     const remainingSeconds = Math.floor((remainingTime / 1000) % 60);
 
-    return `${zeroPadding(remainingMinutes, 2)}:${zeroPadding(
-        remainingSeconds,
-        2
-    )}`;
+    return `${zeroPadding(remainingMinutes, 2)}:${zeroPadding(remainingSeconds, 2)}`;
 }
 
 function switchScene(parameters) {
@@ -80,9 +77,18 @@ function switchScene(parameters) {
             console.log("終了時間");
         }
     }
+    function playSound(source, volume) {
+        // 音源・音量を指定して再生
+        if (volume !== "0") {
+            const audio = new Audio(source);
+            audio.volume = volume;
+            audio.play();
+        }
+    }
 }
 
 function updateDisplay(targetId, contentId) {
+    // スタイルの変更を適用
     const targetLabel = document.getElementById(targetId);
     document.getElementById(contentId).textContent = targetLabel.className;
     document.body.style.fontSize = "16vw";
@@ -107,6 +113,14 @@ function displayVolume(parameters) {
     }
 }
 
+function hideRange(rangeList) {
+    // 要素の非表示設定
+    rangeList.forEach(rangeId => {
+        const rangeElement = document.getElementById(rangeId);
+        rangeElement.style.display = "none";
+    });
+}
+
 if (parameters.volumeSlider === 0) {
     const range = ["volume"]
     hideRange(range);
@@ -117,16 +131,7 @@ if (parameters.displayOutside === 0) {
     hideRange(range);
 }
 
-
-function hideRange(rangeList) {
-    rangeList.forEach(rangeId => {
-        const rangeElement = document.getElementById(rangeId);
-        rangeElement.style.display = "none";
-    });
-}
-
 function updateTimer() {
-    const parameters = getParameters();
     const timerLabel = document.getElementById("timer-label");
     const timeLabel = document.getElementById("time-label");
     const counter = document.getElementById("counter");
@@ -195,13 +200,7 @@ function calculateRemainingPathDashArray2(parameters, r) {
     return `${(frame * work) / interval} ${frame}`;
 }
 
-function playSound(source, volume) {
-    if (volume !== "0") {
-        const audio = new Audio(source);
-        audio.volume = volume;
-        audio.play();
-    }
-}
+
 
 const timerCircleBase = document.getElementById("timer-circle-base");
 timerCircleBase.setAttribute(
