@@ -4,8 +4,8 @@
     <link rel="stylesheet" href="style.css">
 </head>
 
-<body>
-    <div class="timer">
+<body id="body">
+    <div id="content" class="timer">
         <svg id="outside" class="timer-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
             <g class="timer-group">
                 <circle cx="50" cy="50" r="47" class="timer-circle-background" />
@@ -16,7 +16,7 @@
                     stroke-dasharray="283" />
             </g>
         </svg>
-        <div class="timer-label">
+        <div id="timer" class="timer-label">
             <div>
                 <div id="time-label">Time</div>
                 <div id="state"></div>
