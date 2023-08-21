@@ -6,6 +6,7 @@ function zeroPadding(number, length) {
 function calculateClassName(parameters) {
     // 現在時間の算出
     const date = new Date();
+    console.log(date);
     const minutes = date.getMinutes();
     const interval = parameters.work + parameters.break;
     const minutesInInterval = minutes % interval;
@@ -15,6 +16,7 @@ function calculateClassName(parameters) {
 function calculateTimerText(parameters) {
     // タイマー表示の作成
     const date = new Date();
+    console.log(date);
     const currentTime = date.getTime();
     const startDateTime = new Date(
         date.getFullYear(),
@@ -45,6 +47,7 @@ function calculateTimerText(parameters) {
 function switchScene(parameters) {
     // Work と Break の切替
     const date = new Date();
+    console.log(date);
     const minutes = date.getMinutes();
     const seconds = date.getSeconds();
     const interval = parameters.work + parameters.break;
@@ -146,6 +149,7 @@ function displayParameters(parameters) {
 
 function calculateTimeText() {
     const date = new Date();
+    console.log(date);
     const month = date.getMonth() + 1;
     const day = date.getDate();
     const hours = date.getHours();
@@ -155,6 +159,7 @@ function calculateTimeText() {
 
 function calculateSessionText(parameters) {
     const date = new Date();
+    console.log(date);
     const minutes = date.getMinutes();
     const interval = parameters.work + parameters.break;
     const minutesInInterval = minutes % interval;
@@ -170,6 +175,7 @@ function calculateSessionText(parameters) {
 function calculateRemainingPathDashArray(parameters, r) {
     const frame = Math.round(2 * r * Math.PI);
     const date = new Date();
+    console.log(date);
     const minutes = date.getMinutes();
     const interval = parameters.work + parameters.break;
     const minutesInInterval = minutes % interval;
