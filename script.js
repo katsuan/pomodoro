@@ -118,14 +118,17 @@ if (parameters.volumeSlider === 0) {
 // sliderの値が0の場合に範囲を非表示にする
 if (parameters.outsideDisplay === 0) {
     // HTMLで非表示にする範囲を取得
-    const outsideRange = document.getElementById("outside");
-    outsideRange.style.display = "none";
-    const pomodoroRange = document.getElementById("counter");
-    pomodoroRange.style.display = "none"
-    const timeRange = document.getElementById("time-label");
-    timeRange.style.display = "none"
+    const range = ["outside", "counter", "time-label"];
+    hideRange(range);
 }
 
+
+function hideRange(rangeList) {
+    rangeList.forEach(rangeId => {
+        const rangeElement = document.getElementById(rangeId);
+        rangeElement.style.display = "none";
+    });
+}
 
 function updateTimer() {
     const parameters = getParameters();
