@@ -5,14 +5,14 @@ function getParameters() {
     const workString = params.get("work") || "25";
     const startHourString = params.get("start") || "9";
     const stateString = params.get("state") || "1";
-    const volumeString = params.get("volume") || "1";
+    const volumeString = params.get("vol") || "1";
     const outsideString = params.get("outside") || "1";
     return {
         break: parseInt(breakString, 10),
         work: parseInt(workString, 10),
         startHour: parseInt(startHourString, 10),
         displayState: parseInt(stateString, 10),
-        volumeSlider: parseInt(volumeString, 10),
+        displayVolume: parseInt(volumeString, 10),
         displayOutside: parseInt(outsideString, 10),
     };
 }
@@ -121,7 +121,7 @@ function hideRange(rangeList) {
     });
 }
 
-if (parameters.volumeSlider === 0) {
+if (parameters.displayVolume === 0) {
     const range = ["volume"]
     hideRange(range);
 }
