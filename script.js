@@ -1,31 +1,19 @@
 function getParameters() {
     // URLパラメーターを定義
-    const defaultValues = {
-        "break": 5,
-        "work": 25,
-        "startHour": 9,
-        "displayDate": 1,
-        "displayState": 1,
-        "displayVolume": 1,
-        "displayOutside": 1,
-        "displayCounter": 1,
-    };
-
     const params = new URL(window.location.href).searchParams;
-
-    const parseParam = (paramName) => {
-        const paramString = params.get(paramName);
-        return paramString ? parseInt(paramString, 10) : defaultValues[paramName];
-    };
+    const breakString = params.get("break") || "5";
+    const workString = params.get("work") || "25";
+    const startHourString = params.get("start") || "9";
+    const stateString = params.get("state") || "1";
+    const volumeString = params.get("volume") || "1";
+    const outsideString = params.get("outside") || "1";
     return {
-        break: parseParam("break"),
-        work: parseParam("work"),
-        startHour: parseParam("start"),
-        displayDate: parseParam("date"),
-        displayState: parseParam("state"),
-        displayVolume: parseParam("vol"),
-        displayOutside: parseParam("outside"),
-        displayCounter: parseParam("counter"),
+        break: parseInt(breakString, 10),
+        work: parseInt(workString, 10),
+        startHour: parseInt(startHourString, 10),
+        displayState: parseInt(stateString, 10),
+        volumeSlider: parseInt(volumeString, 10),
+        displayOutside: parseInt(outsideString, 10),
     };
 }
 // パラメーターを取得
@@ -133,12 +121,7 @@ function hideRange(rangeList) {
     });
 }
 
-if (parameters.displayDate === 0) {
-    const range = ["time-label"]
-    hideRange(range);
-}
-
-if (parameters.displayVolume === 0) {
+if (parameters.volumeSlider === 0) {
     const range = ["volume"]
     hideRange(range);
 }
@@ -148,18 +131,12 @@ if (parameters.displayOutside === 0) {
     hideRange(range);
 }
 
-if (parameters.displayCounter === 0) {
-    const range = ["counter"];
-    hideRange(range);
-}
-
 function updateTimer() {
     const timerLabel = document.getElementById("timer-label");
     const timeLabel = document.getElementById("time-label");
     const counter = document.getElementById("counter");
     const timerCircleInner = document.getElementById("timer-circle-inner");
     const status = document.getElementById("status");
-    const timerCircleBase = document.getElementById("timer-circle-base");
 
     timerLabel.textContent = calculateTimerText(parameters);
     timerLabel.className = calculateClassName(parameters);
@@ -171,12 +148,14 @@ function updateTimer() {
     );
     status.textContent = displayParameters(parameters);
 
+    setTimeout(updateTimer, 1000);
     switchScene(parameters);
     displayState(parameters);
     displayVolume(parameters);
 }
 
-setInterval(updateTimer, 1000);
+// setInterval(updateTimer, 1000);
+updateTimer();
 
 function displayParameters(parameters) {
     return `work ${parameters.work} | break ${parameters.break}`;
@@ -196,14 +175,13 @@ function calculateSessionText(parameters) {
     const minutes = date.getMinutes();
     const interval = parameters.work + parameters.break;
     const minutesInInterval = minutes % interval;
-    let sessionCounter =
+    const sessionCounter =
         Math.floor(((date.getHours() - parameters.startHour) * 60 + minutes) / interval) + 1;
-    if (sessionCounter < 0) {
-        sessionCounter = Math.floor(((date.getHours() + parameters.startHour) * 60 + minutes) / interval) + 1;
+    if (minutesInInterval < parameters.work) {
+        return `pomodoro #${zeroPadding(sessionCounter, 2)}`;
+    } else {
+        return `break #${zeroPadding(sessionCounter, 2)}`;
     }
-    const sessionType = minutesInInterval < parameters.work ? "pomodoro" : "break";
-
-    return `${sessionType} #${zeroPadding(sessionCounter, 2)}`;
 }
 
 function calculateRemainingPathDashArray(parameters, r) {
