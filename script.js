@@ -136,12 +136,12 @@ if (parameters.displayVolume === 0) {
 if (parameters.displayOutside === 0) {
     const range = ["outside", "counter", "time-label"];
     hideRange(range);
-    document.getElementById("content").style.alignItems = "center";
-    document.getElementById("content").style.width = "100vw";
-    document.getElementById("content").style.height = "auto";
-    document.getElementById("timer").style.alignItems = "center";
-    document.getElementById("timer").style.width = "100vw";
-    document.getElementById("timer").style.height = "auto";
+    // document.getElementById("content").style.alignItems = "center";
+    // document.getElementById("content").style.width = "100vw";
+    // document.getElementById("content").style.height = "auto";
+    // document.getElementById("timer").style.alignItems = "center";
+    // document.getElementById("timer").style.width = "100vw";
+    // document.getElementById("timer").style.height = "auto";
 }
 
 function updateTimer() {
