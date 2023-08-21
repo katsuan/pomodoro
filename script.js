@@ -5,7 +5,7 @@ function getParameters() {
     const workString = params.get("work") || "25";
     const startHourString = params.get("start") || "9";
     const stateString = params.get("state") || "1";
-    const volumeString = params.get("slider") || "1";
+    const volumeString = params.get("volume") || "1";
     const outsideString = params.get("outside") || "1";
     return {
         break: parseInt(breakString, 10),
