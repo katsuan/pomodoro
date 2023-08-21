@@ -1,19 +1,29 @@
 function getParameters() {
     // URLパラメーターを定義
+    const defaultValues = {
+        break: 5,
+        work: 25,
+        startHour: 9,
+        displayState: 1,
+        displayVolume: 1,
+        displayOutside: 1,
+        displayCounter: 1,
+    };
+
     const params = new URL(window.location.href).searchParams;
-    const breakString = params.get("break") || "5";
-    const workString = params.get("work") || "25";
-    const startHourString = params.get("start") || "9";
-    const stateString = params.get("state") || "1";
-    const volumeString = params.get("volume") || "1";
-    const outsideString = params.get("outside") || "1";
+
+    const parseParam = (paramName) => {
+        const paramString = params.get(paramName);
+        return paramString ? parseInt(paramString, 10) : defaultValues[paramName];
+    };
     return {
-        break: parseInt(breakString, 10),
-        work: parseInt(workString, 10),
-        startHour: parseInt(startHourString, 10),
-        displayState: parseInt(stateString, 10),
-        volumeSlider: parseInt(volumeString, 10),
-        displayOutside: parseInt(outsideString, 10),
+        break: parseParam("break"),
+        work: parseParam("work"),
+        startHour: parseParam("start"),
+        displayState: parseParam("state"),
+        displayVolume: parseParam("vol"),
+        displayOutside: parseParam("outside"),
+        displayCounter: parseParam("counter"),
     };
 }
 // パラメーターを取得
@@ -121,7 +131,7 @@ function hideRange(rangeList) {
     });
 }
 
-if (parameters.volumeSlider === 0) {
+if (parameters.displayVolume === 0) {
     const range = ["volume"]
     hideRange(range);
 }
@@ -175,13 +185,14 @@ function calculateSessionText(parameters) {
     const minutes = date.getMinutes();
     const interval = parameters.work + parameters.break;
     const minutesInInterval = minutes % interval;
-    const sessionCounter =
+    let sessionCounter =
         Math.floor(((date.getHours() - parameters.startHour) * 60 + minutes) / interval) + 1;
-    if (minutesInInterval < parameters.work) {
-        return `pomodoro #${zeroPadding(sessionCounter, 2)}`;
-    } else {
-        return `break #${zeroPadding(sessionCounter, 2)}`;
+    if (sessionCounter < 0) {
+        sessionCounter = 0
     }
+    const sessionType = minutesInInterval < parameters.work ? "pomodoro" : "break";
+
+    return `${sessionType} #${zeroPadding(sessionCounter, 2)}`;
 }
 
 function calculateRemainingPathDashArray(parameters, r) {
