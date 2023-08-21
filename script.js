@@ -1,3 +1,24 @@
+function getParameters() {
+    // URLパラメーターを定義
+    const params = new URL(window.location.href).searchParams;
+    const breakString = params.get("break") || "5";
+    const workString = params.get("work") || "25";
+    const startHourString = params.get("start") || "9";
+    const displayStateString = params.get("displayState") || "1";
+    const volumeString = params.get("slider") || "1";
+    const outsideString = params.get("outside") || "1";
+    return {
+        break: parseInt(breakString, 10),
+        work: parseInt(workString, 10),
+        startHour: parseInt(startHourString, 10),
+        displayState: parseInt(displayStateString, 10),
+        volumeSlider: parseInt(volumeString, 10),
+        displayOutside: parseInt(outsideString, 10),
+    };
+}
+// パラメーターを取得
+const parameters = getParameters();
+
 function zeroPadding(number, length) {
     // 指定桁まで 0 を追加
     return number.toString().padStart(length, "0");
@@ -61,63 +82,37 @@ function switchScene(parameters) {
     }
 }
 
+function updateDisplay(targetId, contentId) {
+    const targetLabel = document.getElementById(targetId);
+    document.getElementById(contentId).textContent = targetLabel.className;
+    document.body.style.fontSize = "16vw";
+    document.body.style.flexDirection = "column";
+}
+
 function displayState(parameters) {
     if (parameters.displayState) {
-        const timerLabel = document.getElementById("timer-label");
-        document.getElementById("state").textContent = timerLabel.className;
-        document.body.style.fontSize = "16vw";
-        document.body.style.flexDirection = "column";
+        updateDisplay("timer-label", "state")
     }
 }
 
 function displayCounter(parameters) {
     if (parameters.displayCounter) {
-        const timerLabel = document.getElementById("timer-label");
-        document.getElementById("counter").textContent = timerLabel.className;
-        document.body.style.fontSize = "16vw";
-        document.body.style.flexDirection = "column";
+        updateDisplay("timer-label", "counter")
     }
 }
 
 function displayVolume(parameters) {
     if (parameters.displayVolume) {
-        const volumeSlider = document.getElementById("volume-slider");
-        document.getElementById("state").textContent = volumeSlider.className;
-        document.body.style.fontSize = "16vw";
-        document.body.style.flexDirection = "column";
+        updateDisplay("volume-slider", "state")
     }
 }
 
-function getParameters() {
-    // パラメーターを定義
-    const params = new URL(window.location.href).searchParams;
-    const breakString = params.get("break") || "5";
-    const workString = params.get("work") || "25";
-    const displayStateString = params.get("displayState") || "1";
-    const startHourString = params.get("start") || "9";
-    const volumeString = params.get("slider") || "1";
-    const outsideString = params.get("outside") || "1";
-    return {
-        break: parseInt(breakString, 10),
-        work: parseInt(workString, 10),
-        displayState: parseInt(displayStateString, 10),
-        startHour: parseInt(startHourString, 10),
-        volumeSlider: parseInt(volumeString, 10),
-        outsideDisplay: parseInt(outsideString, 10),
-    };
-}
-// パラメーターを取得
-const parameters = getParameters();
-// sliderの値が0の場合に範囲を非表示にする
 if (parameters.volumeSlider === 0) {
-    // HTMLで非表示にする範囲を取得
-    const volumeSliderRange = document.getElementById("volume");
-    volumeSliderRange.style.display = "none";
+    const range = ["volume"]
+    hideRange(range);
 }
 
-// sliderの値が0の場合に範囲を非表示にする
-if (parameters.outsideDisplay === 0) {
-    // HTMLで非表示にする範囲を取得
+if (parameters.displayOutside === 0) {
     const range = ["outside", "counter", "time-label"];
     hideRange(range);
 }
