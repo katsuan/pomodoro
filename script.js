@@ -120,6 +120,7 @@ function updateTimer() {
     const counter = document.getElementById("counter");
     const timerCircleInner = document.getElementById("timer-circle-inner");
     const status = document.getElementById("status");
+    const timerCircleBase = document.getElementById("timer-circle-base");
 
     timerLabel.textContent = calculateTimerText(parameters);
     timerLabel.className = calculateClassName(parameters);
@@ -131,14 +132,12 @@ function updateTimer() {
     );
     status.textContent = displayParameters(parameters);
 
-    setTimeout(updateTimer, 1000);
     switchScene(parameters);
     displayState(parameters);
     displayVolume(parameters);
 }
 
-// setInterval(updateTimer, 1000);
-updateTimer();
+setInterval(updateTimer, 1000);
 
 function displayParameters(parameters) {
     return `work ${parameters.work} | break ${parameters.break}`;
