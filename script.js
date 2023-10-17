@@ -138,6 +138,8 @@ if (parameters.displayOutside === 0) {
     hideRange(range);
     const timerLabel = document.querySelector('.timer-label');
     timerLabel.style.height = '2rem';
+    const timer = document.querySelector('.timer');
+    timer.style.height = '2rem';
 }
 
 function updateTimer() {
