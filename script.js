@@ -134,7 +134,7 @@ if (parameters.displayVolume === 0) {
 }
 
 if (parameters.displayOutside === 0) {
-    const range = ["outside", "counter", "time-label"];
+    const range = ["outside", "time-label"];
     hideRange(range);
     const timerLabel = document.querySelector('.timer-label');
     timerLabel.style.height = '2rem';
@@ -191,7 +191,7 @@ function calculateSessionText(parameters) {
     const sessionCounter =
         Math.floor(((date.getHours() - parameters.startHour) * 60 + minutes) / interval) + 1;
     if (minutesInInterval < parameters.work) {
-        return `pomodoro #${zeroPadding(sessionCounter, 2)}`;
+        return `work #${zeroPadding(sessionCounter, 2)}`;
     } else {
         return `break #${zeroPadding(sessionCounter, 2)}`;
     }
