@@ -136,12 +136,8 @@ if (parameters.displayVolume === 0) {
 if (parameters.displayOutside === 0) {
     const range = ["outside", "counter", "time-label"];
     hideRange(range);
-    // document.getElementById("content").style.alignItems = "center";
-    // document.getElementById("content").style.width = "100vw";
-    // document.getElementById("content").style.height = "auto";
-    // document.getElementById("timer").style.alignItems = "center";
-    // document.getElementById("timer").style.width = "100vw";
-    // document.getElementById("timer").style.height = "auto";
+    const timerLabel = document.querySelector('.timer-label');
+    timerLabel.style.height = '1rem';
 }
 
 function updateTimer() {
@@ -212,8 +208,6 @@ function calculateRemainingPathDashArray2(parameters, r) {
     const work = parameters.work;
     return `${(frame * work) / interval} ${frame}`;
 }
-
-
 
 const timerCircleBase = document.getElementById("timer-circle-base");
 timerCircleBase.setAttribute(
