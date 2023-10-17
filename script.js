@@ -134,12 +134,12 @@ if (parameters.displayVolume === 0) {
 }
 
 if (parameters.displayOutside === 0) {
-    const range = ["outside", "time-label", "status"];
+    const range = ["outside", "time-label", "status", "counter"];
     hideRange(range);
     const timerLabel = document.querySelector('.timer-label');
-    timerLabel.style.height = '2rem';
+    timerLabel.style.height = '1rem';
     const timer = document.querySelector('.timer');
-    timer.style.height = '2rem';
+    timer.style.height = '1rem';
     const body = document.querySelector('body');
     body.style.margin = 'none'
 }
@@ -191,7 +191,7 @@ function calculateSessionText(parameters) {
     const sessionCounter =
         Math.floor(((date.getHours() - parameters.startHour) * 60 + minutes) / interval) + 1;
     if (minutesInInterval < parameters.work) {
-        return `work #${zeroPadding(sessionCounter, 2)}`;
+        return `pomodoro #${zeroPadding(sessionCounter, 2)}`;
     } else {
         return `break #${zeroPadding(sessionCounter, 2)}`;
     }
