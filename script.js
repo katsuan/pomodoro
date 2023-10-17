@@ -140,6 +140,8 @@ if (parameters.displayOutside === 0) {
     timerLabel.style.height = '2rem';
     const timer = document.querySelector('.timer');
     timer.style.height = '2rem';
+    const body = document.querySelector('body');
+    body.style.margin = 'none'
 }
 
 function updateTimer() {
