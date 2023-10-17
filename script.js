@@ -137,7 +137,7 @@ if (parameters.displayOutside === 0) {
     const range = ["outside", "counter", "time-label"];
     hideRange(range);
     const timerLabel = document.querySelector('.timer-label');
-    timerLabel.style.height = '1rem';
+    timerLabel.style.height = '2rem';
 }
 
 function updateTimer() {
