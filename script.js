@@ -1,3 +1,17 @@
+// 通知の許可を要求
+Notification.requestPermission().then(function (permission) {
+    if (permission === 'granted') {
+        console.log('通知が許可されました');
+    } else {
+        console.error('通知が拒否されました');
+    }
+});
+
+// ＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃
+// 以下は基本的にいじらないはず
+// ポモドーロの基本JS
+// ＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃
+
 function getParameters() {
     // URLパラメーターを定義
     const params = new URL(window.location.href).searchParams;
