@@ -1,0 +1,12 @@
+{
+    "name": "PomodoroTimer",
+    "short_name": "pomodoro!",
+    "display": "fullscreen",
+    "icons": [
+        {
+            "src": "images/soccer.png",
+            "sizes": "48x48",
+            "type": "image/png"
+        }
+    ]
+}
