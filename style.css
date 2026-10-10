@@ -27,6 +27,9 @@ body {
     margin: 0px auto;
     overflow: hidden;
     text-align: center;
+    /* 以前は JS が毎秒指定していた値。タイマー内の文字の配置はこの大きさが前提 */
+    font-size: 16vw;
+    flex-direction: column;
 }
 
 /* タイマーのスタイル */
@@ -132,4 +135,212 @@ input[type="range"] {
     height: 14px;
     border-radius: 10px;
     border: solid 3px var(--color-accent);
+}
+
+/* 時間だけの小さい表示（?outside=0） */
+body.is-compact .timer,
+body.is-compact .timer-label {
+    height: 1rem;
+}
+
+/* ＃＃＃＃ 設定パネル（html の font-size が画面基準の大きさなので、ここは px で指定する） ＃＃＃＃ */
+.settings-button {
+    position: fixed;
+    right: max(12px, env(safe-area-inset-right));
+    bottom: max(12px, env(safe-area-inset-bottom));
+    width: 48px;
+    height: 48px;
+    border: 1px solid var(--color-accent);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.9);
+    font-size: 22px;
+    line-height: 1;
+    cursor: pointer;
+    opacity: 0.75;
+}
+
+.settings-button:hover,
+.settings-button:focus-visible {
+    opacity: 1;
+}
+
+.settings {
+    position: fixed;
+    inset: 0;
+    z-index: 10;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding: 16px 12px max(12px, env(safe-area-inset-bottom));
+    background: rgba(30, 30, 30, 0.4);
+    font-size: 16px;
+    text-align: left;
+}
+
+.settings[hidden] {
+    display: none;
+}
+
+.settings-card {
+    display: grid;
+    gap: 14px;
+    width: min(100%, 420px);
+    max-height: 100%;
+    overflow: auto;
+    padding: 20px;
+    border-radius: 20px;
+    background: #fff;
+    color: var(--color-base);
+    font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Noto Sans JP", sans-serif;
+}
+
+.settings-title {
+    margin: 0;
+    font-size: 18px;
+}
+
+.settings-presets {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.settings-presets button,
+.settings-secondary,
+.settings-primary {
+    min-height: 40px;
+    padding: 0 14px;
+    border: 1px solid #d6d6d6;
+    border-radius: 999px;
+    background: #fff;
+    color: var(--color-base);
+    font: inherit;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.settings-row {
+    display: grid;
+    grid-template-columns: 72px 1fr 24px;
+    align-items: center;
+    gap: 10px;
+    font-weight: 700;
+}
+
+.settings-stepper {
+    display: grid;
+    grid-template-columns: 48px minmax(0, 1fr) 48px;
+    overflow: hidden;
+    border: 1px solid #d6d6d6;
+    border-radius: 14px;
+}
+
+.settings-stepper button {
+    min-height: 48px;
+    border: 0;
+    background: #f5f1e6;
+    color: var(--color-base);
+    font-size: 22px;
+    font-weight: 800;
+    cursor: pointer;
+    touch-action: manipulation;
+}
+
+.settings-stepper input,
+.settings-time {
+    width: 100%;
+    min-width: 0;
+    min-height: 48px;
+    border: 0;
+    background: transparent;
+    color: var(--color-base);
+    font: inherit;
+    font-size: 20px;
+    font-weight: 700;
+    text-align: center;
+    -moz-appearance: textfield;
+}
+
+.settings-time {
+    border: 1px solid #d6d6d6;
+    border-radius: 14px;
+}
+
+.settings-stepper input::-webkit-outer-spin-button,
+.settings-stepper input::-webkit-inner-spin-button {
+    margin: 0;
+    -webkit-appearance: none;
+}
+
+.settings-unit {
+    font-size: 14px;
+}
+
+.settings-note {
+    margin: -6px 0 0;
+    color: #777;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.settings-toggles {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 15px;
+}
+
+.settings-toggles legend {
+    margin-bottom: 6px;
+    font-weight: 700;
+}
+
+.settings-toggles input {
+    width: 20px;
+    height: 20px;
+    vertical-align: -4px;
+    accent-color: var(--color-second);
+}
+
+.settings-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+}
+
+.settings-primary {
+    grid-column: 1 / -1;
+    min-height: 48px;
+    border-color: var(--color-second);
+    background: var(--color-second);
+    color: #fff;
+    font-size: 16px;
+}
+
+@media (min-width: 600px) {
+    .settings {
+        align-items: center;
+    }
+}
+
+/* 音量バーはタイマーの大きさに合わせる（px 指定だと viewport 指定後に相対的に大きくなり、文字が上にずれる） */
+#volume input[type="range"] {
+    width: 0.42rem;
+    height: 0.045rem;
+    border-width: 0.01rem;
+}
+
+#volume p {
+    font-size: 0.032rem;
+}
+
+/* 標準モードでは、音量バーだけの行も本文の文字サイズ(16vw)分の高さになり全体が上にずれるので、行を小さくする
+   （以前は DOCTYPE が無く、互換モードでこの高さが付かなかった） */
+#volume {
+    font-size: 0.032rem;
+    line-height: 1;
 }

@@ -1,5 +1,8 @@
+<!DOCTYPE html>
+<html lang="ja">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>PomodoroTimer</title>
     <link rel="stylesheet" href="style.css">
     <link rel="manifest" href="manifest.json">
@@ -31,5 +34,58 @@
             </div>
         </div>
     </div>
+
+    <!-- 設定（画面右下の ⚙️ から開く）。変えるとすぐ反映され、URL にも書き戻される -->
+    <button id="settings-button" class="settings-button" type="button" aria-label="タイマーの設定">⚙️</button>
+    <div id="settings" class="settings" hidden>
+        <form id="settings-form" class="settings-card" aria-labelledby="settings-title">
+            <h2 id="settings-title" class="settings-title">タイマーの設定</h2>
+
+            <div class="settings-presets" role="group" aria-label="よく使う組み合わせ">
+                <button type="button" data-preset="25/5">25分 / 5分</button>
+                <button type="button" data-preset="50/10">50分 / 10分</button>
+                <button type="button" data-preset="45/15">45分 / 15分</button>
+            </div>
+
+            <label class="settings-row">
+                <span>作業</span>
+                <span class="settings-stepper">
+                    <button type="button" data-step-for="work" data-step="-5" aria-label="作業を5分減らす">−</button>
+                    <input name="work" type="number" inputmode="numeric" min="1" max="180" step="1">
+                    <button type="button" data-step-for="work" data-step="5" aria-label="作業を5分増やす">＋</button>
+                </span>
+                <span class="settings-unit">分</span>
+            </label>
+            <label class="settings-row">
+                <span>休憩</span>
+                <span class="settings-stepper">
+                    <button type="button" data-step-for="break" data-step="-1" aria-label="休憩を1分減らす">−</button>
+                    <input name="break" type="number" inputmode="numeric" min="1" max="120" step="1">
+                    <button type="button" data-step-for="break" data-step="1" aria-label="休憩を1分増やす">＋</button>
+                </span>
+                <span class="settings-unit">分</span>
+            </label>
+            <label class="settings-row">
+                <span>開始時刻</span>
+                <input name="start" type="time" class="settings-time">
+                <span class="settings-unit"></span>
+            </label>
+            <p id="settings-cycle" class="settings-note"></p>
+
+            <fieldset class="settings-toggles">
+                <legend>表示</legend>
+                <label><input name="displayCounter" type="checkbox"> 回数</label>
+                <label><input name="displayVolume" type="checkbox"> 音量バー</label>
+            </fieldset>
+
+            <div class="settings-actions">
+                <button id="settings-copy" type="button" class="settings-secondary">URLをコピー</button>
+                <button id="settings-reset" type="button" class="settings-secondary">初期値に戻す</button>
+                <button id="settings-close" type="button" class="settings-primary">閉じる</button>
+            </div>
+        </form>
+    </div>
+
     <script src="script.js" type="text/javascript"></script>
 </body>
+</html>
