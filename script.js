@@ -1,11 +1,15 @@
-// 通知の許可を要求
-Notification.requestPermission().then(function (permission) {
-    if (permission === 'granted') {
-        console.log('通知が許可されました');
-    } else {
-        console.error('通知が拒否されました');
-    }
-});
+// 通知の許可を要求（LINE アプリ内のブラウザなど通知が使えない環境ではスキップする）
+if ("Notification" in window && typeof Notification.requestPermission === "function") {
+    Promise.resolve(Notification.requestPermission()).then(function (permission) {
+        if (permission === 'granted') {
+            console.log('通知が許可されました');
+        } else {
+            console.error('通知が拒否されました');
+        }
+    }).catch(function (error) {
+        console.error(error);
+    });
+}
 
 // ＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃
 // 以下は基本的にいじらないはず
