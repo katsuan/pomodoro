@@ -55,6 +55,38 @@ def star(c, outer, inner, points=5, rot=-90):
     return [polar(c, rot + 180 / points * i, outer if i % 2 == 0 else inner) for i in range(points * 2)]
 
 
+def shape_points(sh):
+    """図形の外形を囲む点（円・輪・線の太さ・字の高さも含める）"""
+    pad = sh.get("r", 0) + sh.get("w", 0) / 2 + sh.get("h", 0) / 2  # 円は半径、輪は外側、線は太さの半分、字は高さの半分
+    points = [sh["box"][:2], sh["box"][2:]] if sh["t"] == "rect" else sh.get("p", [sh.get("c")])
+    return [(x + dx, y + dy) for x, y in points for dx in (-pad, pad) for dy in (-pad, pad)]
+
+
+def shapes_bounds(shapes):
+    pts = [pt for sh in shapes if not sh.get("deco") for pt in shape_points(sh)]
+    return min(x for x, _ in pts), min(y for _, y in pts), max(x for x, _ in pts), max(y for _, y in pts)
+
+
+def centered(shapes, target=(50, 50)):
+    """飾り（deco）以外の図形の外形の真ん中を target にそろえる（Q のしっぽの分も含めて、アイコンの真ん中に見えるように）。
+    ずらした図形と、ずらした量 (dx, dy) を返す。飾りはそのまま"""
+    x0, y0, x1, y1 = shapes_bounds(shapes)
+    dx, dy = target[0] - (x0 + x1) / 2, target[1] - (y0 + y1) / 2
+    move = lambda pt: (pt[0] + dx, pt[1] + dy)  # noqa: E731
+    out = []
+    for sh in shapes:
+        sh = dict(sh)
+        if not sh.get("deco"):
+            if "c" in sh:
+                sh["c"] = move(sh["c"])
+            if "p" in sh:
+                sh["p"] = [move(pt) for pt in sh["p"]]
+            if "box" in sh:
+                sh["box"] = (*move(sh["box"][:2]), *move(sh["box"][2:]))
+        out.append(sh)
+    return out, (dx, dy)
+
+
 def _glyphs():
     from fontTools.ttLib import TTFont
 
@@ -237,14 +269,9 @@ class Brand:
         k = (h / 2) / mark_radius
         mark = [sh for sh in mark if not sh.get("deco")]
         # 図形の外形（しっぽを含む。輪の中心からの範囲）
-        ext = []
-        for sh in mark:
-            pad = sh.get("r", 0) + sh.get("w", 0) / 2 + sh.get("h", 0) / 2  # 円は半径、輪は外側、線は太さの半分、字は高さの半分
-            points = [sh["box"][:2], sh["box"][2:]] if sh["t"] == "rect" else sh.get("p", [sh.get("c")])
-            for x, y in points:
-                ext.append((x - mark_center[0] - pad, y - mark_center[1] - pad, x - mark_center[0] + pad, y - mark_center[1] + pad))
-        mx0, my0 = min(e[0] for e in ext) * k, min(e[1] for e in ext) * k
-        mx1, my1 = max(e[2] for e in ext) * k, max(e[3] for e in ext) * k
+        bx0, by0, bx1, by1 = shapes_bounds(mark)
+        mx0, my0 = (bx0 - mark_center[0]) * k, (by0 - mark_center[1]) * k
+        mx1, my1 = (bx1 - mark_center[0]) * k, (by1 - mark_center[1]) * k
         paths, x, q = [], 0.0, None
         for char in word:
             if char == "Q":

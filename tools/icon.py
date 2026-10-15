@@ -2,9 +2,11 @@
 """ぽもくる（PomoQ）のアイコン・ロゴ・OGP を作る。
 
 名前は「ぽもくる」（ポモドーロ＋くり返しの「くるくる」）。おくるん＝OQRN・キロっく＝kiloQ と同じ作り方で「く」を Q にして PomoQ。
-アイコンはおくるんと同じ角の丸い四角に、ポモドーロの黄色（style.css の --color-primary #F9BE00）のグラデーション。輪はおくるんの Q と同じく、くるくる回る時計回りの矢印
-（集中と休憩のくり返し）。30分を1周として、25分の作業を矢印、5分の休憩をすき間にし、すき間（右下）からしっぽを出して Q に見せる。
-上には、トマトのヘタを兼ねたストップウォッチの竜頭。輪の中にタイマーの針。
+アイコンはおくるんと同じ角の丸い四角に、アプリの画面と同じ色：背景は濃い灰色（style.css の --color-base #4d4d4d）、
+進む輪は黄色（--color-primary #F9BE00）、針はピンク（--color-second #DF7861）。
+輪はポモドーロ画面と同じく、12 時から時計回りに進む矢印。30分を1周として 25分の作業ぶん（300°）が矢印で、
+10 時の手前で矢印の先になる。10 時〜12 時のすき間が 5分の休憩。12 時の真上に、トマトのヘタを兼ねたストップウォッチの竜頭。
+右下に白いしっぽを輪の下に重ねて出し、Q に見せる。
 
   icon.svg・icon-32.png・apple-touch-icon.png・icon-512.png・icon-maskable-512.png … アイコン
   logo.svg … 横長のロゴ「PomoQ」（P・o・m・o は Jua、Q はアイコンと同じ形）
@@ -14,37 +16,38 @@
 """
 from pathlib import Path
 
-from brandkit import Brand, arc, arrow_head, polar
+from brandkit import Brand, arc, arrow_head, centered, polar
 
 ROOT = Path(__file__).resolve().parent.parent
-BRAND = Brand(light=(255, 210, 64), dark=(240, 160, 0))  # style.css の --color-primary #F9BE00 を中心に
+BRAND = Brand(light=(96, 96, 96), dark=(60, 60, 60))  # style.css の --color-base #4d4d4d を中心に
+YELLOW = (249, 190, 0)  # --color-primary
+PINK = (223, 120, 97)  # --color-second
 
 C = (46, 50)  # 輪の中心
 R, RING_W = 21, 10  # 輪の半径（線の真ん中）・太さ
-# 輪は時計回りの矢印（おくるんの Q と同じ考え方）。ポモドーロの「25分作業＋5分休憩」に合わせて、
-# 30分を1周として 25分ぶん（300°）を矢印、5分ぶん（60°）をすき間にする。すき間を右下（45°）に置き、そこから Q のしっぽを出す
-GAP_CENTER = 50
-ARC_START = GAP_CENTER + 30  # 度（右が 0、時計回り）。すき間の終わり＝矢印の始まり（左下寄り）
-ARC_END = ARC_START + 300 - 12  # 矢印の先の分だけ手前で止める
+ARC_START = -90  # 12 時
+ARC_END = ARC_START + 300 - 12  # 25分ぶん（300°）。矢印の先の分だけ手前で止める（10 時の手前）
 ARROW_DIR = ARC_END + 90  # 時計回りに進む向き
 ARROW_TIP = polar(polar(C, ARC_END, R), ARROW_DIR, 8)
-# 上のつまみ（竜頭）＝トマトのヘタ：軸と横棒（T の字）
+# 上のつまみ（竜頭）＝トマトのヘタ：軸と横棒（T の字）。12 時の矢印の始まりにつなげる
 TOP = (C[0], C[1] - R - RING_W / 2 + 1)
 STEM_TOP = (TOP[0], TOP[1] - 8)
 CALYX = [(STEM_TOP[0] - 6, STEM_TOP[1]), (STEM_TOP[0] + 6, STEM_TOP[1])]
+TAIL = 45  # Q のしっぽの向き（右下）
 SHAPES = [
-    {"t": "circle", "c": C, "r": R, "alpha": 0.18},  # トマトの面（うっすら）
-    {"t": "line", "p": arc(C, R, ARC_START, ARC_END), "w": RING_W},
-    {"t": "poly", "p": arrow_head(ARROW_TIP, ARROW_DIR, 11, 18)},
-    {"t": "line", "p": [C, (C[0], C[1] - 11)], "w": 4.5},  # タイマーの針（12 時の向き）
-    {"t": "circle", "c": C, "r": 4},
-    # Q のしっぽ：5分ぶんのすき間（右下）から外へ
-    {"t": "line", "p": [polar(C, GAP_CENTER, R + 1), polar(C, GAP_CENTER, 39)], "w": 8.5},
-    # 竜頭（ヘタ）。根元を背景の色で削って、輪と見分ける
-    {"t": "line", "p": [TOP, STEM_TOP], "w": 7, "fill": "bg"},
-    {"t": "line", "p": [polar(TOP, -90, 3), STEM_TOP], "w": 5},
+    # Q のしっぽ（白）。輪の下に重ねる（いちばん先に描く）
+    {"t": "line", "p": [polar(C, TAIL, R), polar(C, TAIL, 35)], "w": 7.5},  # 根元は輪の線の真ん中（丸い端が輪に隠れる）
+    {"t": "circle", "c": C, "r": R, "alpha": 0.18},  # 輪の内側（うっすら）
+    {"t": "line", "p": arc(C, R, ARC_START, ARC_END), "w": RING_W, "fill": YELLOW},
+    {"t": "poly", "p": arrow_head(ARROW_TIP, ARROW_DIR, 11, 18), "fill": YELLOW},
+    {"t": "line", "p": [C, (C[0], C[1] - 11)], "w": 4.5, "fill": PINK},  # タイマーの針（12 時の向き）
+    {"t": "circle", "c": C, "r": 4, "fill": PINK},
+    {"t": "line", "p": [TOP, STEM_TOP], "w": 5},  # 竜頭
     {"t": "line", "p": CALYX, "w": 5},
 ]
+# 外形（しっぽを含む）の真ん中をアイコンの真ん中にそろえ、Q の重心が片寄って見えないようにする（ロゴも同じ形を使う）
+SHAPES, (_DX, _DY) = centered(SHAPES)
+C = (C[0] + _DX, C[1] + _DY)
 RING_OUTER = R + RING_W / 2
 
 
