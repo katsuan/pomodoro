@@ -3,7 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>PomodoroTimer</title>
+    <title>ぽもくる｜ポモドーロタイマー</title>
+    <meta name="description" content="ぽもくる（PomoQ）。集中と休憩をくるくるくり返すポモドーロタイマー。">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="ぽもくる｜ポモドーロタイマー">
+    <meta property="og:description" content="集中と休憩をくるくるくり返すポモドーロタイマー。">
+    <meta property="og:url" content="https://katsuan.github.io/pomodoro/">
+    <meta property="og:site_name" content="ぽもくる（PomoQ）">
+    <meta property="og:image" content="https://katsuan.github.io/pomodoro/ogp.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="ぽもくる（PomoQ）：集中と休憩をくるくるくり返すポモドーロタイマー">
+    <meta name="twitter:card" content="summary_large_image">
+    <!-- アイコン・ロゴ・OGP は tools/icon.py で作る -->
+    <link rel="icon" href="icon.svg" type="image/svg+xml">
+    <link rel="icon" href="icon-32.png" type="image/png" sizes="32x32">
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
     <link rel="stylesheet" href="style.css">
     <link rel="manifest" href="manifest.json">
 </head>
@@ -39,6 +54,11 @@
     <button id="settings-button" class="settings-button" type="button" aria-label="タイマーの設定">⚙️</button>
     <div id="settings" class="settings" hidden>
         <form id="settings-form" class="settings-card" aria-labelledby="settings-title">
+            <!-- 名前は設定の中だけに出す（タイマーの画面はすっきりさせておく） -->
+            <div class="settings-brand">
+                <span class="settings-brand-name"><img src="icon.svg" alt="" width="24" height="24">ぽもくる</span>
+                <img class="settings-brand-logo" src="logo.svg" alt="PomoQ" width="58" height="24">
+            </div>
             <h2 id="settings-title" class="settings-title">タイマーの設定</h2>
 
             <div class="settings-presets" role="group" aria-label="よく使う組み合わせ">

@@ -23,8 +23,8 @@ const DEFAULTS = {
     break: 5,          // 休憩(分)        ?break=
     start: "09:00",    // 区切りの起点    ?start=9 / 9:30 / 0930
     displayState: 1,   // 状態欄 ?state=0 で非表示（今は文字を入れていないので見た目は変わらない）
-    displayCounter: 1, // 回数            ?counter=0 で非表示
-    displayVolume: 1,  // 音量バー        ?vol=0 で非表示
+    displayCounter: 0, // 回数            ?counter=1 で表示（初めは出さない）
+    displayVolume: 0,  // 音量バー        ?vol=1 で表示（初めは出さない）
     displayOutside: 1, // 円・日時など    ?outside=0 で時間だけの小さい表示
     volume: 0
 };
@@ -93,17 +93,24 @@ function getParameters() {
     return normalizeSettings(Object.assign({}, DEFAULTS, loadSaved(), fromUrl));
 }
 
-// 今の設定を URL に書き戻す（初期値と同じものは書かない）。ブックマーク・共有にそのまま使える
+// URL に残すのは作業・休憩の分だけ（初期値と同じなら書かない）。ブックマーク・共有にそのまま使える。
+// ほかのパラメーター（開始時刻・表示・流入口の目印など）は読み込んだら端末に保存して、URL からは消す
+const URL_KEYS = ["work", "break"];
+
 function writeUrl(settings) {
     const url = new URL(window.location.href);
-    for (const [key, name] of Object.entries(PARAM_NAMES)) {
-        if (settings[key] === DEFAULTS[key]) url.searchParams.delete(name);
-        else url.searchParams.set(name, key === "start" ? settings.start.replace(":", "") : String(settings[key]));
+    url.search = "";
+    for (const key of URL_KEYS) {
+        if (settings[key] !== DEFAULTS[key]) url.searchParams.set(PARAM_NAMES[key], String(settings[key]));
     }
     history.replaceState(null, "", url);
 }
 
 let parameters = getParameters();
+if (window.location.search) {
+    save(parameters);
+    writeUrl(parameters);
+}
 
 // ＃＃＃＃ 時刻の計算（残り時間・状態・回数・円の進み具合はすべてここから出す） ＃＃＃＃
 
