@@ -6,7 +6,7 @@
 
 ## アイコン・ロゴ・OGP
 
-`python3 tools/icon.py` で作る（図形を描く部分は、となりの line-share の `tools/brandkit.py`（`~/GitHub/line-share` を同じフォルダに置いて使う））。
+`python3 tools/icon.py` で作る（図形を描く部分は、となりのおくるん（`~/GitHub/q-oqrn`。GitHub のリポジトリ名は line-share）の `tools/brandkit.py`）。
 
 - アイコン（`icon.svg`・`icon-32.png`・`apple-touch-icon.png`・`icon-512.png`・`icon-maskable-512.png`）：おくるんと同じ角の丸い四角に、アプリの画面と同じ色（背景は濃い灰色 #4d4d4d、進む輪は黄色 #F9BE00、針はピンク #DF7861）。輪はポモドーロ画面と同じく 12 時から時計回りに進む矢印で、30分を1周として 25分の作業ぶん（300°）が矢印、10 時〜12 時のすき間が 5分の休憩。12 時の真上にトマトのヘタを兼ねた竜頭、右下に白いしっぽを輪の下に重ねて Q に見せる
 - 横長のロゴ（`logo.svg`）：P・o・m・o はフォント（Jua）、Q はアイコンと同じ形

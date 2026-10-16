@@ -12,11 +12,11 @@
   logo.svg … 横長のロゴ「PomoQ」（P・o・m・o は Jua、Q はアイコンと同じ形）
   ogp.png  … 共有したときの画像（1200×630）
 
-使い方: python3 tools/icon.py（となりの line-share/tools/brandkit.py を使う）
+使い方: python3 tools/icon.py（となりのおくるん（q-oqrn）の tools/brandkit.py を使う）
 """
 from pathlib import Path
 
-import brandkit_path  # noqa: F401（となりの line-share/tools/brandkit.py を読めるようにする）
+import brandkit_path  # noqa: F401（となりのおくるん（q-oqrn）の tools/brandkit.py を読めるようにする）
 from brandkit import Brand, arc, arrow_head, centered, polar
 
 ROOT = Path(__file__).resolve().parent.parent
