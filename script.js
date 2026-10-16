@@ -26,12 +26,14 @@ const DEFAULTS = {
     displayCounter: 0, // 回数            ?counter=1 で表示（初めは出さない）
     displayVolume: 0,  // 音量バー        ?vol=1 で表示（初めは出さない）
     displayOutside: 1, // 円・日時など    ?outside=0 で時間だけの小さい表示
+    sound: "chime",    // 区切りの音      ?sound=simple でピッ・ポーンの短い音
     volume: 0
 };
 // URL パラメーター名との対応
 const PARAM_NAMES = {
     work: "work", break: "break", start: "start",
-    displayState: "state", displayCounter: "counter", displayVolume: "vol", displayOutside: "outside"
+    displayState: "state", displayCounter: "counter", displayVolume: "vol", displayOutside: "outside",
+    sound: "sound"
 };
 
 function zeroPadding(number, length) {
@@ -63,6 +65,7 @@ function normalizeSettings(raw) {
         displayCounter: clampInt(raw.displayCounter, 0, 1, DEFAULTS.displayCounter),
         displayVolume: clampInt(raw.displayVolume, 0, 1, DEFAULTS.displayVolume),
         displayOutside: clampInt(raw.displayOutside, 0, 1, DEFAULTS.displayOutside),
+        sound: raw.sound === "simple" ? "simple" : "chime",
         volume: Math.min(1, Math.max(0, Number(raw.volume) || 0))
     };
 }
@@ -159,14 +162,100 @@ function circleLength(circle) {
 
 // ＃＃＃＃ 音 ＃＃＃＃
 
-function playSound(source, volume) {
-    // 音源・音量を指定して再生
-    if (Number(volume) > 0) {
-        const audio = new Audio(source);
-        audio.volume = Number(volume);
-        audio.play().catch(function () {
-            // 画面を一度も触っていないと自動再生できないことがある
-        });
+// 音はすべて Web Audio の音量つまみ（masterGain）を通して鳴らす。
+// 音量バーを動かすと、鳴っている途中の音もすぐ大きさが変わる（iPhone は <audio> の音量を変えられないので、この形にしている）
+// 音の種類：chime＝チャイム・「そこまで」（mp3）／ simple＝ピッ・ピッ・ピー（作業）とポーン・ポーン（休憩）の合成音
+const CHIME_FILES = { work: "sound/学校のチャイム.mp3", break: "sound/「そこまで」.mp3" };
+// [高さ(Hz), 鳴りはじめ(秒), 長さ(秒)]
+const SIMPLE_TONES = {
+    work: [[880, 0, 0.12], [880, 0.22, 0.12], [1320, 0.44, 0.5]],
+    break: [[784, 0, 0.7], [523, 0.55, 1.1]]
+};
+
+let audioContext = null;
+let masterGain = null;
+const chimeBuffers = {};
+
+function getAudio() {
+    if (!audioContext) {
+        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+        if (!AudioContextClass) return null;
+        audioContext = new AudioContextClass();
+        masterGain = audioContext.createGain();
+        masterGain.gain.value = parameters.volume;
+        masterGain.connect(audioContext.destination);
+    }
+    return audioContext;
+}
+
+// 画面を一度も触っていないと音を出せない（ブラウザの決まり）。触ったときに音の準備をしておく
+function unlockAudio() {
+    const context = getAudio();
+    if (context && context.state === "suspended") context.resume().catch(function () {});
+}
+
+function setVolume(volume) {
+    if (!masterGain) return;
+    // ぷつっと鳴らないよう、ごく短くなめらかに変える
+    masterGain.gain.setTargetAtTime(volume, audioContext.currentTime, 0.015);
+}
+
+// 鳴らせる状態か（まだ触っていないページでは鳴らさない。あとから遅れて鳴らないように）
+async function readyAudio() {
+    const context = getAudio();
+    if (!context) return null;
+    if (context.state !== "running") {
+        await Promise.race([context.resume().catch(function () {}), new Promise(function (resolve) { setTimeout(resolve, 300); })]);
+    }
+    return context.state === "running" ? context : null;
+}
+
+function loadChime(source) {
+    if (!chimeBuffers[source]) {
+        chimeBuffers[source] = fetch(source)
+            .then(function (response) { return response.arrayBuffer(); })
+            .then(function (data) {
+                return new Promise(function (resolve, reject) { audioContext.decodeAudioData(data, resolve, reject); });
+            })
+            .catch(function (error) {
+                delete chimeBuffers[source];
+                throw error;
+            });
+    }
+    return chimeBuffers[source];
+}
+
+function playTones(context, tones) {
+    const now = context.currentTime + 0.02;
+    tones.forEach(function ([frequency, at, length]) {
+        const oscillator = context.createOscillator();
+        const envelope = context.createGain();
+        oscillator.type = "sine";
+        oscillator.frequency.value = frequency;
+        envelope.gain.setValueAtTime(0.0001, now + at);
+        envelope.gain.exponentialRampToValueAtTime(0.7, now + at + 0.01);
+        envelope.gain.exponentialRampToValueAtTime(0.0001, now + at + length);
+        oscillator.connect(envelope).connect(masterGain);
+        oscillator.start(now + at);
+        oscillator.stop(now + at + length + 0.05);
+    });
+}
+
+// kind：work（作業の始まり）／ break（休憩の始まり）。音量 0 でも鳴らしておき、途中で上げれば聞こえる
+async function playCue(kind) {
+    const context = await readyAudio();
+    if (!context) return;
+    if (parameters.sound === "simple") {
+        playTones(context, SIMPLE_TONES[kind]);
+        return;
+    }
+    try {
+        const source = context.createBufferSource();
+        source.buffer = await loadChime(CHIME_FILES[kind]);
+        source.connect(masterGain);
+        source.start();
+    } catch (error) {
+        console.error(error);
     }
 }
 
@@ -175,14 +264,7 @@ let lastPhaseClass = null;
 function switchScene(phase) {
     // 作業 ⇄ 休憩 が切り替わった瞬間に音を鳴らす（ページを開いた直後は鳴らさない）
     if (lastPhaseClass && lastPhaseClass !== phase.className) {
-        const volume = document.getElementById("volume-slider").value;
-        if (phase.isWork) {
-            playSound("sound/学校のチャイム.mp3", volume);
-            console.log("開始時間");
-        } else {
-            playSound("sound/「そこまで」.mp3", volume);
-            console.log("終了時間");
-        }
+        playCue(phase.isWork ? "work" : "break");
     }
     lastPhaseClass = phase.className;
 }
@@ -241,7 +323,8 @@ function bindSettings() {
     const close = document.getElementById("settings-close");
     const copy = document.getElementById("settings-copy");
     const reset = document.getElementById("settings-reset");
-    const volume = document.getElementById("volume-slider");
+    const volumeSliders = [document.getElementById("volume-slider"), form.volume];
+    const test = document.getElementById("settings-test");
 
     function fillForm() {
         form.work.value = parameters.work;
@@ -249,6 +332,7 @@ function bindSettings() {
         form.start.value = parameters.start;
         form.displayCounter.checked = parameters.displayCounter === 1;
         form.displayVolume.checked = parameters.displayVolume === 1;
+        form.sound.value = parameters.sound;
         document.getElementById("settings-cycle").textContent =
             `${parameters.work + parameters.break}分ごとに、${parameters.start} から数えてくり返します`;
     }
@@ -280,13 +364,15 @@ function bindSettings() {
         if (event.key === "Escape" && !panel.hidden) panel.hidden = true;
     });
 
-    form.addEventListener("change", function () {
+    form.addEventListener("change", function (event) {
+        if (event.target.name === "volume") return; // 音量は下の input で反映ずみ
         apply({
             work: form.work.value,
             break: form.break.value,
             start: form.start.value,
             displayCounter: form.displayCounter.checked ? 1 : 0,
-            displayVolume: form.displayVolume.checked ? 1 : 0
+            displayVolume: form.displayVolume.checked ? 1 : 0,
+            sound: form.sound.value
         });
     });
     form.addEventListener("submit", function (event) {
@@ -318,13 +404,35 @@ function bindSettings() {
         setTimeout(function () { copy.textContent = "URLをコピー"; }, 2000);
     });
     reset.addEventListener("click", function () {
-        apply(Object.assign({}, DEFAULTS, { volume: parameters.volume }));
+        apply(Object.assign({}, DEFAULTS, { volume: parameters.volume, sound: parameters.sound }));
     });
 
-    volume.value = String(parameters.volume);
-    volume.addEventListener("input", function () {
-        parameters.volume = Number(volume.value);
+    // 試しに鳴らす（作業の始まりの音）。音量が 0 なら少し上げてから鳴らす
+    test.addEventListener("click", function () {
+        if (!(parameters.volume > 0)) setVolumeFrom(0.5);
+        playCue("work");
+    });
+
+    // 音量バー（タイマーの画面と設定の2つ）。動かした瞬間に、鳴っている音の大きさも変わる
+    function setVolumeFrom(value, origin) {
+        parameters.volume = Math.min(1, Math.max(0, Number(value) || 0));
+        volumeSliders.forEach(function (slider) {
+            if (slider !== origin) slider.value = String(parameters.volume);
+        });
+        unlockAudio();
+        setVolume(parameters.volume);
         save(parameters);
+    }
+    volumeSliders.forEach(function (slider) {
+        slider.value = String(parameters.volume);
+        slider.addEventListener("input", function () {
+            setVolumeFrom(slider.value, slider);
+        });
+    });
+
+    // 画面のどこかを触ったら、音を出せるように準備する
+    ["pointerdown", "keydown"].forEach(function (type) {
+        document.addEventListener(type, unlockAudio, { passive: true });
     });
 }
 

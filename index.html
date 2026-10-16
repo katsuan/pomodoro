@@ -19,7 +19,7 @@
     <link rel="icon" href="icon.svg" type="image/svg+xml">
     <link rel="icon" href="icon-32.png" type="image/png" sizes="32x32">
     <link rel="apple-touch-icon" href="apple-touch-icon.png">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css?v=3">
     <link rel="manifest" href="manifest.json">
 </head>
 
@@ -92,6 +92,14 @@
             </label>
             <p id="settings-cycle" class="settings-note"></p>
 
+            <fieldset class="settings-toggles settings-sound">
+                <legend>区切りの音</legend>
+                <label><input name="sound" type="radio" value="chime"> チャイム</label>
+                <label><input name="sound" type="radio" value="simple"> シンプル（ピッ・ポーン）</label>
+                <label class="settings-volume">音量 <input name="volume" type="range" min="0" max="1" step="0.1" aria-label="音量"></label>
+                <button id="settings-test" type="button" class="settings-secondary">▶ 試しに鳴らす</button>
+            </fieldset>
+
             <fieldset class="settings-toggles">
                 <legend>表示</legend>
                 <label><input name="displayCounter" type="checkbox"> 回数</label>
@@ -108,7 +116,7 @@
         </form>
     </div>
 
-    <script src="script.js" type="text/javascript"></script>
+    <script src="script.js?v=2" type="text/javascript"></script>
     <script src="https://katsuan.github.io/line-share/shared/tool-share.js" data-tool="pomoq" defer></script>
 </body>
 </html>

@@ -327,6 +327,30 @@ body.is-compact .timer-label {
     accent-color: var(--color-second);
 }
 
+/* 区切りの音：音量バーと「試しに鳴らす」は1行ずつ */
+.settings-sound {
+    gap: 10px 16px;
+}
+
+.settings-volume {
+    display: flex;
+    flex: 1 1 100%;
+    align-items: center;
+    gap: 10px;
+}
+
+/* タイマーの画面の音量バーと同じ形（細いバー） */
+.settings-toggles .settings-volume input {
+    flex: 1;
+    width: auto;
+    height: 14px;
+    vertical-align: middle;
+}
+
+.settings-sound .settings-secondary {
+    flex: 1 1 100%;
+}
+
 .settings-actions {
     display: grid;
     grid-template-columns: 1fr 1fr;
