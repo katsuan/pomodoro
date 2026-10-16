@@ -389,3 +389,12 @@ body.is-compact .timer-label {
     font-size: 0.032rem;
     line-height: 1;
 }
+
+/* キャッチコピー（設定の名前のすぐ下） */
+.settings-brand-copy {
+    margin: -6px 0 0;
+    color: #4d4d4d;
+    font-size: 13px;
+    font-weight: 800;
+    line-height: 1.4;
+}

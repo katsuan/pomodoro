@@ -63,7 +63,7 @@ def main():
     BRAND.write_icons(ROOT, SHAPES)
     logo, ratio = BRAND.logo_svg("PomoQ", SHAPES, C, RING_OUTER, "PomoQ（ぽもくる）")
     (ROOT / "logo.svg").write_text(logo, encoding="utf-8")
-    BRAND.write_ogp(ROOT / "ogp.png", SHAPES, "ぽもくる", "PomoQ", ["集中と休憩を、くるくる", "くり返すポモドーロタイマー"], decorate)
+    BRAND.write_ogp(ROOT / "ogp.png", SHAPES, "ぽもくる", "PomoQ", ["25分の作業と5分の休憩を、時計に", "合わせてくり返すポモドーロタイマー"], decorate, copy="集中、休憩、くるくる回そう")
     print(f"アイコン・logo.svg（高さ 28px なら幅 {28 * ratio:.0f}px）・ogp.png を書き出しました")
 
 
