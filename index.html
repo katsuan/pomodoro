@@ -10,7 +10,7 @@
     <meta property="og:description" content="集中と休憩をくるくるくり返すポモドーロタイマー。">
     <meta property="og:url" content="https://katsuan.github.io/pomodoro/">
     <meta property="og:site_name" content="ぽもくる（PomoQ）">
-    <meta property="og:image" content="https://katsuan.github.io/pomodoro/ogp.png">
+    <meta property="og:image" content="https://katsuan.github.io/pomodoro/ogp.png?v=20261019">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
     <meta property="og:image:alt" content="ぽもくる（PomoQ）：集中と休憩をくるくるくり返すポモドーロタイマー">
@@ -19,7 +19,7 @@
     <link rel="icon" href="icon.svg" type="image/svg+xml">
     <link rel="icon" href="icon-32.png" type="image/png" sizes="32x32">
     <link rel="apple-touch-icon" href="apple-touch-icon.png">
-    <link rel="stylesheet" href="style.css?v=4">
+    <link rel="stylesheet" href="style.css?v=202610191251">
     <link rel="manifest" href="manifest.json">
 </head>
 
@@ -52,6 +52,8 @@
 
     <!-- 設定（画面右下の ⚙️ から開く）。変えるとすぐ反映され、URL にも書き戻される -->
     <button id="settings-button" class="settings-button" type="button" aria-label="タイマーの設定">⚙️</button>
+    <!-- 音量が 0 より大きいのに、まだ画面を触っていない（ブラウザの決まりで音を出せない）ときだけ出す -->
+    <button id="sound-unlock" class="sound-unlock" type="button" hidden>🔔 タップで音を有効に</button>
     <div id="settings" class="settings" hidden>
         <form id="settings-form" class="settings-card" aria-labelledby="settings-title">
             <!-- 名前は設定の中だけに出す（タイマーの画面はすっきりさせておく） -->
@@ -117,7 +119,7 @@
         </form>
     </div>
 
-    <script src="script.js?v=2" type="text/javascript"></script>
+    <script src="script.js?v=202610191251" type="text/javascript"></script>
     <script src="https://katsuan.github.io/line-share/shared/tool-share.js" data-tool="pomoq" defer></script>
 </body>
 </html>

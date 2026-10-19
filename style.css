@@ -398,3 +398,26 @@ body.is-compact .timer-label {
     font-weight: 800;
     line-height: 1.4;
 }
+
+/* 音を有効にする案内（js の syncUnlockHint）。⚙️ と同じ下の段の左。html の font-size が画面基準なので px で指定する */
+.sound-unlock {
+    position: fixed;
+    left: max(12px, env(safe-area-inset-left));
+    bottom: max(16px, env(safe-area-inset-bottom));
+    min-height: 40px;
+    padding: 0 14px;
+    border: 1px solid var(--color-accent);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.92);
+    color: #4d4d4d;
+    font: inherit;
+    font-size: 14px;
+    font-weight: 800;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.sound-unlock[hidden] {
+    display: none;
+}
+

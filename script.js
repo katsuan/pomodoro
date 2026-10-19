@@ -191,7 +191,19 @@ function getAudio() {
 // 画面を一度も触っていないと音を出せない（ブラウザの決まり）。触ったときに音の準備をしておく
 function unlockAudio() {
     const context = getAudio();
-    if (context && context.state === "suspended") context.resume().catch(function () {});
+    if (context && context.state === "suspended") {
+        context.resume().then(syncUnlockHint).catch(function () {});
+    }
+    syncUnlockHint();
+}
+
+// 音量が 0 より大きいのに音を出せない（まだ画面を触っていない）ときは「🔔 タップで音を有効に」を出す。
+// 区切りの音が鳴らなかった、を防ぐ（触ったら消える）
+function syncUnlockHint() {
+    const hint = document.getElementById("sound-unlock");
+    if (!hint) return;
+    const running = audioContext && audioContext.state === "running";
+    hint.hidden = !(parameters.volume > 0) || Boolean(running);
 }
 
 function setVolume(volume) {
@@ -437,5 +449,10 @@ function bindSettings() {
 }
 
 bindSettings();
+syncUnlockHint();
+document.getElementById("sound-unlock").addEventListener("click", function () {
+    unlockAudio();
+    playCue("work"); // 有効になったことが音でわかるように、作業の始まりの音を1回だけ
+});
 applyLayout(parameters);
 tick();
