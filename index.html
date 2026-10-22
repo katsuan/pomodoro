@@ -22,7 +22,7 @@
     <!-- Q キット（おくるんの共通部品）。設定のカードの中だけで使う。色と字は style.css の :root で -->
     <link rel="stylesheet" href="https://katsuan.github.io/line-share/shared/ui.css">
     <script src="https://katsuan.github.io/line-share/shared/ui.js" defer></script>
-    <link rel="stylesheet" href="style.css?v=202610221446">
+    <link rel="stylesheet" href="style.css?v=202610221621">
     <link rel="manifest" href="manifest.json">
 </head>
 
@@ -113,8 +113,8 @@
             </fieldset>
 
             <div class="settings-actions">
-                <button id="settings-copy" type="button" class="ls-button">URLをコピー</button>
-                <button id="settings-reset" type="button" class="ls-button">初期値に戻す</button>
+                <button id="settings-copy" type="button" class="ls-button">🔗 リンクをコピー</button>
+                <button id="settings-reset" type="button" class="ls-button">↩️ 初期値に戻す</button>
                 <button id="settings-close" type="button" class="ls-button is-primary settings-primary">閉じる</button>
             </div>
             <!-- 「📤 ぽもくるを紹介する」：おくるんで紹介カードを送る窓口（line-share/shared/tool-share.js。中身は line-share/data/hub-links.json） -->
@@ -122,7 +122,7 @@
         </form>
     </div>
 
-    <script src="script.js?v=202610221446" type="text/javascript"></script>
+    <script src="script.js?v=202610221621" type="text/javascript"></script>
     <script src="https://katsuan.github.io/line-share/shared/tool-share.js" data-tool="pomoq" defer></script>
 <!-- 電波がなくても開けるように（sw.js） -->
 <script>if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").catch(() => {});</script>

@@ -363,6 +363,12 @@ function bindSettings() {
     open.addEventListener("click", function () {
         fillForm();
         panel.hidden = false;
+        // はじめて設定を開いた人にだけ、使い方を3つ（「わかった」で消え、二度と出さない）
+        LineShareUI.firstTip("pomoq", [
+            "作業と休憩の長さを選びます（よく使う組み合わせは押すだけ）",
+            "開始時刻から数えてくり返すので、同じ設定ならみんな同じ時計になります",
+            "「🔗 リンクをコピー」で、同じ設定をほかの人にも送れます"
+        ], form.querySelector(".ls-chips"));
         form.work.focus();
     });
     close.addEventListener("click", function () {
@@ -409,14 +415,19 @@ function bindSettings() {
     copy.addEventListener("click", async function () {
         try {
             await navigator.clipboard.writeText(window.location.href);
-            copy.textContent = "コピーしました";
+            LineShareUI.toast("🔗 この設定のリンクをコピーしました");
         } catch (error) {
-            LineShareUI.ask({ title: "長押ししてコピーしてください", input: window.location.href, readonly: true, ok: "閉じる", cancel: null });
+            LineShareUI.ask({ title: "長押ししてコピーしてね", input: window.location.href, readonly: true, ok: "閉じる", cancel: null });
         }
-        setTimeout(function () { copy.textContent = "URLをコピー"; }, 2000);
     });
+    // 聞かずに戻して、トーストの「元に戻す」で前の設定に戻せる
     reset.addEventListener("click", function () {
+        const before = Object.assign({}, parameters);
         apply(Object.assign({}, DEFAULTS, { volume: parameters.volume, sound: parameters.sound }));
+        LineShareUI.toast("初期値に戻しました", {
+            actionLabel: "元に戻す",
+            onAction: function () { apply(before); }
+        });
     });
 
     // 試しに鳴らす（作業の始まりの音）。音量が 0 なら少し上げてから鳴らす

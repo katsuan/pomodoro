@@ -378,3 +378,30 @@ body.is-compact .timer-label {
     display: none;
 }
 
+
+/* ---- 暗い表示（<html data-ls-dark="auto">。Q キットの色は ui.css が暗くする）。設定のカードと右下のボタンも暗くそろえる ---- */
+@media (prefers-color-scheme: dark) {
+    :root[data-ls-dark="auto"] .settings-card {
+        --color-base: var(--ls-text);
+        background: var(--ls-surface);
+    }
+    :root[data-ls-dark="auto"] .settings-stepper,
+    :root[data-ls-dark="auto"] .settings-time {
+        border-color: var(--ls-line);
+    }
+    :root[data-ls-dark="auto"] .settings-stepper button {
+        background: var(--ls-surface-sub);
+    }
+    :root[data-ls-dark="auto"] .settings-button,
+    :root[data-ls-dark="auto"] .sound-unlock {
+        border-color: var(--ls-line);
+        background: var(--ls-surface);
+        color: var(--ls-text);
+    }
+}
+
+/* はじめての案内（Q キットの ls-tip）。上の p の決まり（タイマー用の小さな字）を、案内の中では使わない */
+.ls-tip p {
+    font-size: 14px;
+    color: inherit;
+}
