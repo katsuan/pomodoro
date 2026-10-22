@@ -411,7 +411,7 @@ function bindSettings() {
             await navigator.clipboard.writeText(window.location.href);
             copy.textContent = "コピーしました";
         } catch (error) {
-            prompt("このURLをコピーしてください", window.location.href);
+            LineShareUI.ask({ title: "長押ししてコピーしてください", input: window.location.href, readonly: true, ok: "閉じる", cancel: null });
         }
         setTimeout(function () { copy.textContent = "URLをコピー"; }, 2000);
     });

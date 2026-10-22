@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="ja" data-ls-dark="auto">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
@@ -21,7 +21,8 @@
     <link rel="apple-touch-icon" href="apple-touch-icon.png">
     <!-- Q キット（おくるんの共通部品）。設定のカードの中だけで使う。色と字は style.css の :root で -->
     <link rel="stylesheet" href="https://katsuan.github.io/line-share/shared/ui.css">
-    <link rel="stylesheet" href="style.css?v=202610221014">
+    <script src="https://katsuan.github.io/line-share/shared/ui.js" defer></script>
+    <link rel="stylesheet" href="style.css?v=202610221446">
     <link rel="manifest" href="manifest.json">
 </head>
 
@@ -121,7 +122,9 @@
         </form>
     </div>
 
-    <script src="script.js?v=202610221014" type="text/javascript"></script>
+    <script src="script.js?v=202610221446" type="text/javascript"></script>
     <script src="https://katsuan.github.io/line-share/shared/tool-share.js" data-tool="pomoq" defer></script>
+<!-- 電波がなくても開けるように（sw.js） -->
+<script>if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").catch(() => {});</script>
 </body>
 </html>

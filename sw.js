@@ -1,12 +1,3 @@
-// sw.js
-
-self.addEventListener('push', function (event) {
-    const options = {
-        body: event.data.text(),
-        icon: 'icon.png',
-    };
-
-    event.waitUntil(
-        self.registration.showNotification('通知タイトル', options)
-    );
-});
+// 電波がなくても、一度開いたページは開けるようにする（中身は ConneQt 共通の line-share/shared/sw-core.js）
+self.CONNEQT_TOOL = "pomoq";
+importScripts("/line-share/shared/sw-core.js");
