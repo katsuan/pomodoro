@@ -19,7 +19,9 @@
     <link rel="icon" href="icon.svg" type="image/svg+xml">
     <link rel="icon" href="icon-32.png" type="image/png" sizes="32x32">
     <link rel="apple-touch-icon" href="apple-touch-icon.png">
-    <link rel="stylesheet" href="style.css?v=202610191251">
+    <!-- Q キット（おくるんの共通部品）。設定のカードの中だけで使う。色と字は style.css の :root で -->
+    <link rel="stylesheet" href="https://katsuan.github.io/line-share/shared/ui.css">
+    <link rel="stylesheet" href="style.css?v=202610221014">
     <link rel="manifest" href="manifest.json">
 </head>
 
@@ -57,17 +59,17 @@
     <div id="settings" class="settings" hidden>
         <form id="settings-form" class="settings-card" aria-labelledby="settings-title">
             <!-- 名前は設定の中だけに出す（タイマーの画面はすっきりさせておく） -->
-            <div class="settings-brand">
-                <span class="settings-brand-name"><img src="icon.svg" alt="" width="24" height="24">ぽもくる</span>
-                <img class="settings-brand-logo" src="logo.svg" alt="PomoQ" width="62" height="24">
+            <div class="ls-brand">
+                <span class="ls-brand-name"><img class="ls-brand-icon" src="icon.svg" alt="" width="24" height="24">ぽもくる</span>
+                <img class="ls-brand-logo" src="logo.svg" alt="PomoQ" width="62" height="24">
             </div>
-            <p class="settings-brand-copy">集中、休憩、くるくる回そう</p>
-            <h2 id="settings-title" class="settings-title">タイマーの設定</h2>
+            <p class="ls-brand-copy">集中、休憩、くるくる回そう</p>
+            <h2 id="settings-title" class="ls-panel-title">タイマーの設定</h2>
 
-            <div class="settings-presets" role="group" aria-label="よく使う組み合わせ">
-                <button type="button" data-preset="25/5">25分 / 5分</button>
-                <button type="button" data-preset="50/10">50分 / 10分</button>
-                <button type="button" data-preset="45/15">45分 / 15分</button>
+            <div class="ls-chips" role="group" aria-label="よく使う組み合わせ">
+                <button class="ls-chip" type="button" data-preset="25/5">25分 / 5分</button>
+                <button class="ls-chip" type="button" data-preset="50/10">50分 / 10分</button>
+                <button class="ls-chip" type="button" data-preset="45/15">45分 / 15分</button>
             </div>
 
             <label class="settings-row">
@@ -93,14 +95,14 @@
                 <input name="start" type="time" class="settings-time">
                 <span class="settings-unit"></span>
             </label>
-            <p id="settings-cycle" class="settings-note"></p>
+            <p id="settings-cycle" class="ls-hint settings-note"></p>
 
             <fieldset class="settings-toggles settings-sound">
                 <legend>区切りの音</legend>
                 <label><input name="sound" type="radio" value="chime"> チャイム</label>
                 <label><input name="sound" type="radio" value="simple"> シンプル（ピッ・ポーン）</label>
                 <label class="settings-volume">音量 <input name="volume" type="range" min="0" max="1" step="0.1" aria-label="音量"></label>
-                <button id="settings-test" type="button" class="settings-secondary">▶ 試しに鳴らす</button>
+                <button id="settings-test" type="button" class="ls-button settings-secondary">▶ 試しに鳴らす</button>
             </fieldset>
 
             <fieldset class="settings-toggles">
@@ -110,16 +112,16 @@
             </fieldset>
 
             <div class="settings-actions">
-                <button id="settings-copy" type="button" class="settings-secondary">URLをコピー</button>
-                <button id="settings-reset" type="button" class="settings-secondary">初期値に戻す</button>
-                <button id="settings-close" type="button" class="settings-primary">閉じる</button>
+                <button id="settings-copy" type="button" class="ls-button">URLをコピー</button>
+                <button id="settings-reset" type="button" class="ls-button">初期値に戻す</button>
+                <button id="settings-close" type="button" class="ls-button is-primary settings-primary">閉じる</button>
             </div>
             <!-- 「📤 ぽもくるを紹介する」：おくるんで紹介カードを送る窓口（line-share/shared/tool-share.js。中身は line-share/data/hub-links.json） -->
             <div data-tool-share></div>
         </form>
     </div>
 
-    <script src="script.js?v=202610191251" type="text/javascript"></script>
+    <script src="script.js?v=202610221014" type="text/javascript"></script>
     <script src="https://katsuan.github.io/line-share/shared/tool-share.js" data-tool="pomoq" defer></script>
 </body>
 </html>

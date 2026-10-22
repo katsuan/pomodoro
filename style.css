@@ -4,6 +4,19 @@
     --color-primary: #F9BE00;
     --color-second: #DF7861;
     --color-accent: #e9eaec;
+
+    /* Q キット（設定のカードの部品）の色と字。ページの背景は白のまま（タイマーの見た目を変えない） */
+    --ls-accent: #DF7861;
+    --ls-accent-strong: #c3624d;
+    --ls-accent-soft: #fbe9e4;
+    --ls-accent-ink: #9a4433;
+    --ls-bg: #ffffff;
+    --ls-text: #4d4d4d;
+}
+
+/* Q キットの土台（ui.css）はページ全体の箱の大きさの決め方を変えるので、タイマーの部分は前の決め方に戻す */
+.timer, .timer * , #volume, #volume * {
+    box-sizing: content-box;
 }
 
 p {
@@ -194,52 +207,11 @@ body.is-compact .timer-label {
     font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Noto Sans JP", sans-serif;
 }
 
-.settings-brand {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 10px;
-}
-
-.settings-brand-name {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 16px;
-    font-weight: 800;
-}
-
-.settings-brand-logo {
-    display: block;
-    width: auto;
-    height: 24px;
-}
-
-.settings-title {
-    margin: 0;
-    font-size: 18px;
-}
-
-.settings-presets {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-}
-
-.settings-presets button,
-.settings-secondary,
-.settings-primary {
-    min-height: 40px;
-    padding: 0 14px;
-    border: 1px solid #d6d6d6;
-    border-radius: 999px;
-    background: #fff;
-    color: var(--color-base);
-    font: inherit;
-    font-size: 14px;
-    font-weight: 700;
-    cursor: pointer;
-}
+/* 名前・ひとこと・見出し・組み合わせ・ボタンは Q キット（ls-brand・ls-chip・ls-button）。設定のカードに合う大きさに */
+.settings-card .ls-brand-name { font-size: 16px; gap: 6px; }
+.settings-card .ls-brand-icon { width: 24px; height: 24px; }
+.settings-card .ls-brand-logo { height: 24px; }
+.settings-card .ls-panel-title { font-size: 18px; }
 
 .settings-row {
     display: grid;
@@ -298,13 +270,6 @@ body.is-compact .timer-label {
     font-size: 14px;
 }
 
-.settings-note {
-    margin: -6px 0 0;
-    color: #777;
-    font-size: 13px;
-    line-height: 1.5;
-}
-
 .settings-toggles {
     display: flex;
     flex-wrap: wrap;
@@ -351,6 +316,10 @@ body.is-compact .timer-label {
     flex: 1 1 100%;
 }
 
+.settings-note {
+    margin-top: -6px;
+}
+
 .settings-actions {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -360,9 +329,6 @@ body.is-compact .timer-label {
 .settings-primary {
     grid-column: 1 / -1;
     min-height: 48px;
-    border-color: var(--color-second);
-    background: var(--color-second);
-    color: #fff;
     font-size: 16px;
 }
 
@@ -388,15 +354,6 @@ body.is-compact .timer-label {
 #volume {
     font-size: 0.032rem;
     line-height: 1;
-}
-
-/* キャッチコピー（設定の名前のすぐ下） */
-.settings-brand-copy {
-    margin: -6px 0 0;
-    color: #4d4d4d;
-    font-size: 13px;
-    font-weight: 800;
-    line-height: 1.4;
 }
 
 /* 音を有効にする案内（js の syncUnlockHint）。⚙️ と同じ下の段の左。html の font-size が画面基準なので px で指定する */

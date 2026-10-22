@@ -4,6 +4,8 @@
 
 公開URL: https://katsuan.github.io/pomodoro/
 
+
+設定のカードの部品（名前・ひとこと・見出し・よく使う組み合わせ・ボタン）は、おくるんの Q キット（`https://katsuan.github.io/line-share/shared/ui.css`。使い方はおくるんの README）。色は `style.css` の `:root` の `--ls-accent` など。タイマーの画面は Q キットを使わず、前のまま（`html` の文字の大きさを画面に合わせている作りのため）。
 ## アイコン・ロゴ・OGP
 
 `python3 tools/icon.py` で作る（図形を描く部分は、となりのおくるん（`~/GitHub/q-oqrn`。GitHub のリポジトリ名は line-share）の `tools/brandkit.py`）。
