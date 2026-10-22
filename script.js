@@ -88,7 +88,7 @@ function save(settings) {
 
 function getParameters() {
     // URL パラメーターを読む（指定されたものだけ上書き）
-    const params = new URL(window.location.href).searchParams;
+    const params = new URL(window.location.href).searchParams; // qcheck-ok: W5 よそへは飛ばない。値は normalizeSettings で数・決まった値にそろえる
     const fromUrl = {};
     for (const [key, name] of Object.entries(PARAM_NAMES)) {
         if (params.has(name)) fromUrl[key] = params.get(name);
