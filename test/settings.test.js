@@ -7,7 +7,7 @@ const fs = require("node:fs");
 const path = require("node:path");
 const vm = require("node:vm");
 
-const XSS = "<img src=x onerror=alert(1)>";
+const XSS = "<img src=x onerror=alert(1)>"; // qcheck-ok: W8 外からの文字の見本
 const source = fs.readFileSync(path.join(__dirname, "../script.js"), "utf8");
 // 設定と時刻の計算の部分だけ（音・画面より前）
 const part = source.slice(source.indexOf('const STORAGE_KEY'), source.indexOf("// ＃＃＃＃ 音 ＃＃＃＃"));
@@ -62,4 +62,8 @@ test("残り時間：9:00 から 25分作業・5分休憩", () => {
   assert.equal(getPhase(s, at(10, 1)).session, 3);
   // 開始時刻より前もくり返しが続く
   assert.equal(getPhase(s, at(8, 50)).isWork, true);
+});
+
+test("開いただけで通知の許可を聞かない（通知は使っていない）", () => {
+  assert.ok(!/Notification\.requestPermission/.test(source));
 });
