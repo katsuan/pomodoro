@@ -402,7 +402,9 @@ function bindSettings() {
     copy.addEventListener("click", async function () {
         try {
             await navigator.clipboard.writeText(window.location.href);
-            LineShareUI.toast("🔗 この設定のリンクをコピーしました");
+            // 季節の絵文字をときどき（Q キットの season.js。読めていなければ付けない）
+            const done = "🔗 この設定のリンクをコピーしました";
+            LineShareUI.toast(window.QSeason ? QSeason.decorate(done) : done);
         } catch (error) {
             LineShareUI.ask({ title: "長押ししてコピーしてね", input: window.location.href, readonly: true, ok: "閉じる", cancel: null });
         }
