@@ -8,9 +8,10 @@ const path = require("node:path");
 const vm = require("node:vm");
 
 const XSS = "<img src=x onerror=alert(1)>"; // qcheck-ok: W8 外からの文字の見本
-const source = fs.readFileSync(path.join(__dirname, "../script.js"), "utf8");
-// 設定と時刻の計算の部分だけ（音・画面より前）
-const part = source.slice(source.indexOf('const STORAGE_KEY'), source.indexOf("// ＃＃＃＃ 音 ＃＃＃＃"));
+const read = (f) => fs.readFileSync(path.join(__dirname, "..", f), "utf8");
+// 設定と時刻の計算の部分だけ（音・画面は読まない）
+const part = read("js/store.js") + "\n" + read("js/phase.js");
+const source = ["js/store.js", "js/phase.js", "js/sound.js", "app.js"].map(read).join("\n");
 
 function load(href, stored) {
   const store = new Map(stored === undefined ? [] : [["pomodoro:settings", stored]]);
