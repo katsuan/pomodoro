@@ -273,11 +273,19 @@ body.is-compact .timer-label {
 .settings-toggles {
     display: flex;
     flex-wrap: wrap;
-    gap: 16px;
+    gap: 0 16px;
     margin: 0;
     padding: 0;
     border: 0;
     font-size: 15px;
+}
+
+/* チャイム・シンプル・回数・音量バー：文字ごと押せるように、高さを 44px に（ux.md の C3） */
+.settings-toggles label:not(.settings-volume) {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 44px;
 }
 
 .settings-toggles legend {
