@@ -1,5 +1,6 @@
 // ぽもくる（PomoQ）：画面の入口（表示・設定パネル）。時計の時刻に合わせて「作業 → 休憩」をくり返す
 // 部品（index.html でこの順に読む）：js/store.js 設定の読み書き → js/phase.js 時刻の計算 → js/sound.js 音 → app.js 画面
+// 読まれるところ：index.html（いちばん最後。js/store.js・js/phase.js・js/sound.js のあと）
 
 function circleLength(circle) {
     return Math.round(2 * Number(circle.getAttribute("r")) * Math.PI);
@@ -7,8 +8,8 @@ function circleLength(circle) {
 
 let lastPhaseClass = null;
 
+// 作業 ⇄ 休憩 が切りかわった瞬間に音を鳴らす（ページを開いた直後・設定を変えた直後は鳴らさない）
 function switchScene(phase) {
-    // 作業 ⇄ 休憩 が切り替わった瞬間に音を鳴らす（ページを開いた直後は鳴らさない）
     if (lastPhaseClass && lastPhaseClass !== phase.className) {
         playCue(phase.isWork ? "work" : "break");
     }
@@ -38,6 +39,7 @@ function applyLayout(settings) {
     base.setAttribute("stroke-dasharray", `${(length * settings.work) / (settings.work + settings.break)} ${length}`);
 }
 
+// いまの時刻で、残り時間・円・日時・回数を描きなおす
 function updateTimer() {
     const phase = getPhase(parameters);
     const timerLabel = document.getElementById("timer-label");
@@ -72,6 +74,7 @@ function bindSettings() {
     const volumeSliders = [document.getElementById("volume-slider"), form.volume];
     const test = document.getElementById("settings-test");
 
+    // 設定パネルの欄に、いまの設定を入れる
     function fillForm() {
         form.work.value = parameters.work;
         form.break.value = parameters.break;

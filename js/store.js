@@ -1,6 +1,7 @@
 // ぽもくる：設定（作業・休憩の分・開始時刻・表示・音）の読み書き
 // 設定の優先順位: URL パラメーター ＞ 画面で設定した値(localStorage の pomodoro:settings) ＞ 初期値
 // ふつうの script（index.html の順に読む）。ここで決めた parameters などは、あとの js/・app.js からも使う
+// 読まれるところ：index.html（いちばん先。ここの parameters を js/sound.js・app.js も使う）
 
 const STORAGE_KEY = "pomodoro:settings";
 const DEFAULTS = {
@@ -21,11 +22,12 @@ const PARAM_NAMES = {
     sound: "sound"
 };
 
+// 数を、指定の桁まで前に 0 を足した文字にする
 function zeroPadding(number, length) {
-    // 指定桁まで 0 を追加
     return number.toString().padStart(length, "0");
 }
 
+// 整数にして min〜max に入れる（数でなければ fallback）
 function clampInt(value, min, max, fallback) {
     const number = parseInt(value, 10);
     return Number.isFinite(number) ? Math.min(max, Math.max(min, number)) : fallback;
@@ -41,6 +43,7 @@ function normalizeStart(value) {
     return `${zeroPadding(hours, 2)}:${zeroPadding(minutes, 2)}`;
 }
 
+// 設定を決まった範囲・決まった値にそろえる
 function normalizeSettings(raw) {
     return {
         work: clampInt(raw.work, 1, 180, DEFAULTS.work),
@@ -55,6 +58,7 @@ function normalizeSettings(raw) {
     };
 }
 
+// 端末に残した設定を読む（読めないときは空）
 function loadSaved() {
     try {
         return JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
@@ -63,6 +67,7 @@ function loadSaved() {
     }
 }
 
+// 設定を端末に残す
 function save(settings) {
     try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(settings));
@@ -71,8 +76,8 @@ function save(settings) {
     }
 }
 
+// いまの設定を決める（URL ＞ 端末に残した設定 ＞ 初期値）
 function getParameters() {
-    // URL パラメーターを読む（指定されたものだけ上書き）
     const params = new URL(window.location.href).searchParams; // qcheck-ok: W5 よそへは飛ばない。値は normalizeSettings で数・決まった値にそろえる
     const fromUrl = {};
     for (const [key, name] of Object.entries(PARAM_NAMES)) {
@@ -85,6 +90,7 @@ function getParameters() {
 // ほかのパラメーター（開始時刻・表示・流入口の目印など）は読み込んだら端末に保存して、URL からは消す
 const URL_KEYS = ["work", "break"];
 
+// 作業・休憩の分だけを URL に残す（初期値と同じなら書かない）
 function writeUrl(settings) {
     const url = new URL(window.location.href);
     url.search = "";

@@ -2,6 +2,7 @@
 // 音はすべて Web Audio の音量つまみ（masterGain）を通して鳴らす。
 // 音量バーを動かすと、鳴っている途中の音もすぐ大きさが変わる（iPhone は <audio> の音量を変えられないので、この形にしている）
 // 音の種類：chime＝チャイム・「そこまで」（mp3）／ simple＝ピッ・ピッ・ピー（作業）とポーン・ポーン（休憩）の合成音
+// 読まれるところ：index.html（js/phase.js のあと）。app.js が使う
 const CHIME_FILES = { work: "sound/学校のチャイム.mp3", break: "sound/「そこまで」.mp3" };
 // [高さ(Hz), 鳴りはじめ(秒), 長さ(秒)]
 const SIMPLE_TONES = {
@@ -13,6 +14,7 @@ let audioContext = null;
 let masterGain = null;
 const chimeBuffers = {};
 
+// 音の準備（AudioContext と音量つまみ）。使えない端末では null
 function getAudio() {
     if (!audioContext) {
         const AudioContextClass = window.AudioContext || window.webkitAudioContext;
@@ -43,6 +45,7 @@ function syncUnlockHint() {
     hint.hidden = !(parameters.volume > 0) || Boolean(running);
 }
 
+// 音量を変える（鳴っている音もすぐ変わる）
 function setVolume(volume) {
     if (!masterGain) return;
     // ぷつっと鳴らないよう、ごく短くなめらかに変える
@@ -59,6 +62,7 @@ async function readyAudio() {
     return context.state === "running" ? context : null;
 }
 
+// チャイムの音のファイルを読んで、鳴らせる形にする（一度読んだら覚えておく）
 function loadChime(source) {
     if (!chimeBuffers[source]) {
         chimeBuffers[source] = fetch(source)
@@ -74,6 +78,7 @@ function loadChime(source) {
     return chimeBuffers[source];
 }
 
+// 合成音（ピッ・ポーン）を鳴らす。tones は [高さ, 鳴りはじめ, 長さ] の並び
 function playTones(context, tones) {
     const now = context.currentTime + 0.02;
     tones.forEach(function ([frequency, at, length]) {
