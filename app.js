@@ -64,39 +64,38 @@ function tick() {
 
 // ＃＃＃＃ 設定パネル ＃＃＃＃
 
-function bindSettings() {
+// 設定パネルの form
+const settingsForm = () => document.getElementById("settings-form");
+
+// 設定パネルの欄に、いまの設定を入れる
+function fillForm() {
+    const form = settingsForm();
+    form.work.value = parameters.work;
+    form.break.value = parameters.break;
+    form.start.value = parameters.start;
+    form.displayCounter.checked = parameters.displayCounter === 1;
+    form.displayVolume.checked = parameters.displayVolume === 1;
+    form.sound.value = parameters.sound;
+    document.getElementById("settings-cycle").textContent =
+        `${parameters.work + parameters.break}分ごとに、${parameters.start} から数えてくり返します`;
+}
+
+// 設定を変える：すぐ反映し、保存して URL にも書き戻す
+function apply(next) {
+    parameters = normalizeSettings(Object.assign({}, parameters, next));
+    save(parameters);
+    writeUrl(parameters);
+    applyLayout(parameters);
+    lastPhaseClass = null; // 設定を変えた直後に音が鳴らないように
+    updateTimer();
+    fillForm();
+}
+
+// 設定パネルを開く・閉じる（⚙️・とじる・外側・Esc）
+function bindPanel() {
     const panel = document.getElementById("settings");
-    const form = document.getElementById("settings-form");
+    const form = settingsForm();
     const open = document.getElementById("settings-button");
-    const close = document.getElementById("settings-close");
-    const copy = document.getElementById("settings-copy");
-    const reset = document.getElementById("settings-reset");
-    const volumeSliders = [document.getElementById("volume-slider"), form.volume];
-    const test = document.getElementById("settings-test");
-
-    // 設定パネルの欄に、いまの設定を入れる
-    function fillForm() {
-        form.work.value = parameters.work;
-        form.break.value = parameters.break;
-        form.start.value = parameters.start;
-        form.displayCounter.checked = parameters.displayCounter === 1;
-        form.displayVolume.checked = parameters.displayVolume === 1;
-        form.sound.value = parameters.sound;
-        document.getElementById("settings-cycle").textContent =
-            `${parameters.work + parameters.break}分ごとに、${parameters.start} から数えてくり返します`;
-    }
-
-    // 変えたらすぐ反映し、保存して URL にも書き戻す
-    function apply(next) {
-        parameters = normalizeSettings(Object.assign({}, parameters, next));
-        save(parameters);
-        writeUrl(parameters);
-        applyLayout(parameters);
-        lastPhaseClass = null; // 設定を変えた直後に音が鳴らないように
-        updateTimer();
-        fillForm();
-    }
-
     open.addEventListener("click", function () {
         fillForm();
         panel.hidden = false;
@@ -108,7 +107,7 @@ function bindSettings() {
         ], form.querySelector(".ls-chips"));
         form.work.focus();
     });
-    close.addEventListener("click", function () {
+    document.getElementById("settings-close").addEventListener("click", function () {
         panel.hidden = true;
         open.focus();
     });
@@ -118,9 +117,13 @@ function bindSettings() {
     document.addEventListener("keydown", function (event) {
         if (event.key === "Escape" && !panel.hidden) panel.hidden = true;
     });
+}
 
+// 設定の欄（作業・休憩・開始時刻・表示・音）と、−／＋・よく使う組み合わせ
+function bindForm() {
+    const form = settingsForm();
     form.addEventListener("change", function (event) {
-        if (event.target.name === "volume") return; // 音量は下の input で反映ずみ
+        if (event.target.name === "volume") return; // 音量は bindVolume の input で反映ずみ
         apply({
             work: form.work.value,
             break: form.break.value,
@@ -133,7 +136,6 @@ function bindSettings() {
     form.addEventListener("submit", function (event) {
         event.preventDefault();
     });
-
     // −／＋ ボタン（data-step-for="work" data-step="-5" など）
     form.querySelectorAll("[data-step-for]").forEach(function (button) {
         button.addEventListener("click", function () {
@@ -148,8 +150,11 @@ function bindSettings() {
             apply({ work, break: rest });
         });
     });
+}
 
-    copy.addEventListener("click", async function () {
+// 「🔗 リンクをコピー」と「初期値に戻す」
+function bindCopyAndReset() {
+    document.getElementById("settings-copy").addEventListener("click", async function () {
         try {
             await navigator.clipboard.writeText(window.location.href);
             // 季節の絵文字をときどき（Q キットの season.js。読めていなければ付けない）
@@ -160,7 +165,7 @@ function bindSettings() {
         }
     });
     // 聞かずに戻して、トーストの「元に戻す」で前の設定に戻せる
-    reset.addEventListener("click", function () {
+    document.getElementById("settings-reset").addEventListener("click", function () {
         const before = Object.assign({}, parameters);
         apply(Object.assign({}, DEFAULTS, { volume: parameters.volume, sound: parameters.sound }));
         LineShareUI.toast("初期値に戻しました", {
@@ -168,37 +173,45 @@ function bindSettings() {
             onAction: function () { apply(before); }
         });
     });
+}
 
-    // 試しに鳴らす（作業の始まりの音）。音量が 0 なら少し上げてから鳴らす
-    test.addEventListener("click", function () {
-        if (!(parameters.volume > 0)) setVolumeFrom(0.5);
-        playCue("work");
+// 音量バー（タイマーの画面と設定の2つ）
+const volumeSliders = () => [document.getElementById("volume-slider"), settingsForm().volume];
+
+// 音量を変える。動かした瞬間に、鳴っている音の大きさも変わる。origin はいま動かしたバー（ほかのバーをそろえる）
+function setVolumeFrom(value, origin) {
+    parameters.volume = Math.min(1, Math.max(0, Number(value) || 0));
+    volumeSliders().forEach(function (slider) {
+        if (slider !== origin) slider.value = String(parameters.volume);
     });
+    unlockAudio();
+    setVolume(parameters.volume);
+    save(parameters);
+}
 
-    // 音量バー（タイマーの画面と設定の2つ）。動かした瞬間に、鳴っている音の大きさも変わる
-    function setVolumeFrom(value, origin) {
-        parameters.volume = Math.min(1, Math.max(0, Number(value) || 0));
-        volumeSliders.forEach(function (slider) {
-            if (slider !== origin) slider.value = String(parameters.volume);
-        });
-        unlockAudio();
-        setVolume(parameters.volume);
-        save(parameters);
-    }
-    volumeSliders.forEach(function (slider) {
+// 音量バー・「試しに鳴らす」と、画面を触ったら音の準備をすること
+function bindVolume() {
+    volumeSliders().forEach(function (slider) {
         slider.value = String(parameters.volume);
         slider.addEventListener("input", function () {
             setVolumeFrom(slider.value, slider);
         });
     });
-
+    // 試しに鳴らす（作業の始まりの音）。音量が 0 なら少し上げてから鳴らす
+    document.getElementById("settings-test").addEventListener("click", function () {
+        if (!(parameters.volume > 0)) setVolumeFrom(0.5);
+        playCue("work");
+    });
     // 画面のどこかを触ったら、音を出せるように準備する
     ["pointerdown", "keydown"].forEach(function (type) {
         document.addEventListener(type, unlockAudio, { passive: true });
     });
 }
 
-bindSettings();
+bindPanel();
+bindForm();
+bindCopyAndReset();
+bindVolume();
 syncUnlockHint();
 document.getElementById("sound-unlock").addEventListener("click", function () {
     unlockAudio();
