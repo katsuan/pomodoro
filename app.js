@@ -154,15 +154,10 @@ function bindForm() {
 
 // 「🔗 リンクをコピー」と「初期値に戻す」
 function bindCopyAndReset() {
-    document.getElementById("settings-copy").addEventListener("click", async function () {
-        try {
-            await navigator.clipboard.writeText(window.location.href);
-            // 季節の絵文字をときどき（Q キットの season.js。読めていなければ付けない）
-            const done = "🔗 この設定のリンクをコピーしました";
-            LineShareUI.toast(window.QSeason ? QSeason.decorate(done) : done);
-        } catch (error) {
-            LineShareUI.ask({ title: "長押ししてコピーしてね", input: window.location.href, readonly: true, ok: "閉じる", cancel: null });
-        }
+    document.getElementById("settings-copy").addEventListener("click", function () {
+        // 季節の絵文字をときどき（Q キットの season.js。読めていなければ付けない）
+        const done = "🔗 この設定のリンクをコピーしました";
+        LineShareUI.copy(window.location.href, { done: window.QSeason ? QSeason.decorate(done) : done });
     });
     // 聞かずに戻して、トーストの「元に戻す」で前の設定に戻せる
     document.getElementById("settings-reset").addEventListener("click", function () {
