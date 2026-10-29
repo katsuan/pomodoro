@@ -137,6 +137,12 @@ body {
     transform-origin: center;
 }
 
+/* オーディオ調整バー：キーボードで選んだときは、まわりに線を出す */
+input[type="range"]:focus-visible {
+    outline: 3px solid var(--color-accent);
+    outline-offset: 3px;
+}
+
 /* オーディオ調整バーのスタイル */
 input[type="range"] {
     -webkit-appearance: none;
