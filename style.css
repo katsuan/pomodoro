@@ -217,7 +217,8 @@ body.is-compact .timer-label {
 .settings-card .ls-brand-name { font-size: 16px; gap: 8px; }
 .settings-card .ls-brand-icon { width: 24px; height: 24px; }
 .settings-card .ls-brand-logo { height: 24px; }
-.settings-card .ls-panel-title { font-size: 18px; }
+/* キャッチコピーはうすい字に（ツールの色は「閉じる」のボタンだけに使う） */
+.settings-card .ls-brand-copy { color: var(--ls-subtext); }
 
 .settings-row {
     display: grid;

@@ -58,14 +58,13 @@
     <!-- 音量が 0 より大きいのに、まだ画面を触っていない（ブラウザの決まりで音を出せない）ときだけ出す -->
     <button id="sound-unlock" class="sound-unlock" type="button" hidden>🔔 タップで音を有効に</button>
     <div id="settings" class="settings" hidden>
-        <form id="settings-form" class="settings-card" aria-labelledby="settings-title">
+        <form id="settings-form" class="settings-card" aria-label="タイマーの設定">
             <!-- 名前は設定の中だけに出す（タイマーの画面はすっきりさせておく） -->
             <div class="ls-brand">
                 <span class="ls-brand-name"><img class="ls-brand-icon" src="icon.svg" alt="" width="24" height="24">ぽもくる</span>
                 <img class="ls-brand-logo" src="logo.svg" alt="PomoQ" width="62" height="24">
             </div>
             <p class="ls-brand-copy">集中、休憩、くるくる回そう</p>
-            <h2 id="settings-title" class="ls-panel-title">タイマーの設定</h2>
 
             <div class="ls-chips" role="group" aria-label="よく使う組み合わせ">
                 <button class="ls-chip" type="button" data-preset="25/5">25分 / 5分</button>
