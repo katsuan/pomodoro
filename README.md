@@ -45,4 +45,4 @@
 
 ## 紹介の窓口
 
-「📤 ぽもくるを紹介する」（設定（⚙️）のいちばん下）は、おくるんの `shared/tool-share.js`（`data-tool="pomoq"`）。押すとおくるんで濃い灰色の紹介カードを作って LINE に送れる（リンクのシェアも選べる）。中身は line-share の `data/hub-links.json` の `key: "pomoq"`。
+「ぽもくるを紹介する」（おくるんのマーク）（設定の歯車を押して開くカードのいちばん下）は、おくるんの `shared/tool-share.js`（`data-tool="pomoq"`）。押すとおくるんで濃い灰色の紹介カードを作って LINE に送れる（リンクのシェアも選べる）。中身は line-share の `data/hub-links.json` の `key: "pomoq"`。
