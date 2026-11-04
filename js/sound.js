@@ -36,7 +36,7 @@ function unlockAudio() {
     syncUnlockHint();
 }
 
-// 音量が 0 より大きいのに音を出せない（まだ画面を触っていない）ときは「🔔 タップで音を有効に」を出す。
+// 音量が 0 より大きいのに音を出せない（まだ画面を触っていない）ときは「タップで音を有効に」を出す。
 // 区切りの音が鳴らなかった、を防ぐ（触ったら消える）
 function syncUnlockHint() {
     const hint = document.getElementById("sound-unlock");

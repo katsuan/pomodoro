@@ -91,7 +91,7 @@ function apply(next) {
     fillForm();
 }
 
-// 設定パネルを開く・閉じる（⚙️・とじる・外側・Esc）
+// 設定パネルを開く・閉じる（歯車・とじる・外側・Esc）
 function bindPanel() {
     const panel = document.getElementById("settings");
     const form = settingsForm();
@@ -103,7 +103,7 @@ function bindPanel() {
         LineShareUI.firstTip("pomoq", [
             "作業と休憩の長さを選びます（よく使う組み合わせは押すだけ）",
             "開始時刻から数えてくり返すので、同じ設定ならみんな同じ時計になります",
-            "「🔗 リンクをコピー」で、同じ設定をほかの人にも送れます"
+            "「リンクをコピー」で、同じ設定をほかの人にも送れます"
         ], form.querySelector(".ls-chips"));
         form.work.focus();
     });
@@ -152,11 +152,11 @@ function bindForm() {
     });
 }
 
-// 「🔗 リンクをコピー」と「初期値に戻す」
+// 「リンクをコピー」と「初期値に戻す」
 function bindCopyAndReset() {
     document.getElementById("settings-copy").addEventListener("click", function () {
         // 季節の絵文字をときどき（Q キットの season.js。読めていなければ付けない）
-        const done = "🔗 この設定のリンクをコピーしました";
+        const done = "この設定のリンクをコピーしました";
         LineShareUI.copy(window.location.href, { done: window.QSeason ? QSeason.decorate(done) : done });
     });
     // 聞かずに戻して、トーストの「元に戻す」で前の設定に戻せる

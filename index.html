@@ -53,10 +53,10 @@
         </div>
     </div>
 
-    <!-- 設定（画面右下の ⚙️ から開く）。変えるとすぐ反映され、URL にも書き戻される -->
-    <button id="settings-button" class="settings-button" type="button" aria-label="タイマーの設定">⚙️</button>
+    <!-- 設定（画面右下の歯車から開く）。変えるとすぐ反映され、URL にも書き戻される -->
+    <button id="settings-button" class="settings-button" type="button" aria-label="タイマーの設定"><span class="ls-icon" data-icon="settings" aria-hidden="true"></span></button>
     <!-- 音量が 0 より大きいのに、まだ画面を触っていない（ブラウザの決まりで音を出せない）ときだけ出す -->
-    <button id="sound-unlock" class="sound-unlock" type="button" hidden>🔔 タップで音を有効に</button>
+    <button id="sound-unlock" class="sound-unlock" type="button" hidden><span class="ls-icon" data-icon="bell" aria-hidden="true"></span>タップで音を有効に</button>
     <div id="settings" class="settings" hidden>
         <form id="settings-form" class="settings-card" aria-label="タイマーの設定">
             <!-- 名前は設定の中だけに出す（タイマーの画面はすっきりさせておく） -->
@@ -102,7 +102,7 @@
                 <label><input name="sound" type="radio" value="chime"> チャイム</label>
                 <label><input name="sound" type="radio" value="simple"> シンプル（ピッ・ポーン）</label>
                 <label class="settings-volume">音量 <input name="volume" type="range" min="0" max="1" step="0.1" aria-label="音量"></label>
-                <button id="settings-test" type="button" class="ls-button settings-secondary">▶ 試しに鳴らす</button>
+                <button id="settings-test" type="button" class="ls-button settings-secondary"><span class="ls-icon" data-icon="play" aria-hidden="true"></span>試しに鳴らす</button>
             </fieldset>
 
             <fieldset class="settings-toggles">
@@ -112,8 +112,8 @@
             </fieldset>
 
             <div class="settings-actions">
-                <button id="settings-copy" type="button" class="ls-button">🔗 リンクをコピー</button>
-                <button id="settings-reset" type="button" class="ls-button">↩️ 初期値に戻す</button>
+                <button id="settings-copy" type="button" class="ls-button"><span class="ls-icon" data-icon="link" aria-hidden="true"></span>リンクをコピー</button>
+                <button id="settings-reset" type="button" class="ls-button"><span class="ls-icon" data-icon="undo" aria-hidden="true"></span>初期値に戻す</button>
                 <button id="settings-close" type="button" class="ls-button is-primary settings-primary">閉じる</button>
             </div>
             <!-- 「📤 ぽもくるを紹介する」：おくるんで紹介カードを送る窓口（line-share/shared/tool-share.js。中身は line-share/data/hub-links.json） -->
