@@ -5,17 +5,17 @@
 公開URL: https://katsuan.github.io/pomodoro/
 
 
-設定のカードの部品（名前・ひとこと・見出し・よく使う組み合わせ・ボタン）は、おくるんの Q キット（`https://katsuan.github.io/line-share/shared/ui.css`。使い方はおくるんの README）。色は `style.css` の `:root` の `--ls-accent` など。タイマーの画面は Q キットを使わず、前のまま（`html` の文字の大きさを画面に合わせている作りのため）。
+設定のカードの部品（名前・ひとこと・見出し・よく使う組み合わせ・ボタン）は、おくるんの Q キット（`https://katsuan.github.io/oqrn/shared/ui.css`。使い方はおくるんの README）。色は `style.css` の `:root` の `--ls-accent` など。タイマーの画面は Q キットを使わず、前のまま（`html` の文字の大きさを画面に合わせている作りのため）。
 ## アイコン・ロゴ・OGP
 
-`python3 tools/icon.py` で作る（図形を描く部分は、となりのおくるん（`~/GitHub/q-oqrn`。GitHub のリポジトリ名は line-share）の `tools/brandkit.py`）。
+`python3 tools/icon.py` で作る（図形を描く部分は、となりのおくるん（`~/GitHub/q-oqrn`。GitHub のリポジトリ名は oqrn）の `tools/brandkit.py`）。
 
 - アイコン（`icon.svg`・`icon-32.png`・`apple-touch-icon.png`・`icon-512.png`・`icon-maskable-512.png`）：おくるんと同じ角の丸い四角に、アプリの画面と同じ色（背景は濃い灰色 #4d4d4d、進む輪は黄色 #F9BE00、針はピンク #DF7861）。輪はポモドーロ画面と同じく 12 時から時計回りに進む矢印で、30分を1周として 25分の作業ぶん（300°）が矢印、10 時〜12 時のすき間が 5分の休憩。12 時の真上にトマトのヘタを兼ねた竜頭、右下に白いしっぽを輪の下に重ねて Q に見せる
 - 横長のロゴ（`logo.svg`）：P・o・m・o はフォント（Jua）、Q はアイコンと同じ形
 - 共有したときの画像（`ogp.png`、1200×630）
 - ホーム画面に追加したとき用に `manifest.webmanifest`
 
-おくるんのトップの「ほかのツール」（line-share の `data/hub-links.json`）には「ぽもくる 〜PomoQ〜」として、このアイコン付きで載せている。
+おくるんのトップの「ほかのツール」（oqrn の `data/hub-links.json`）には「ぽもくる 〜PomoQ〜」として、このアイコン付きで載せている。
 
 ## URL パラメーター
 
@@ -45,4 +45,4 @@
 
 ## 紹介の窓口
 
-「ぽもくるを紹介する」（おくるんのマーク）（設定の歯車を押して開くカードのいちばん下）は、おくるんの `shared/tool-share.js`（`data-tool="pomoq"`）。押すとおくるんで濃い灰色の紹介カードを作って LINE に送れる（リンクのシェアも選べる）。中身は line-share の `data/hub-links.json` の `key: "pomoq"`。
+「ぽもくるを紹介する」（おくるんのマーク）（設定の歯車を押して開くカードのいちばん下）は、おくるんの `shared/tool-share.js`（`data-tool="pomoq"`）。押すとおくるんで濃い灰色の紹介カードを作って LINE に送れる（リンクのシェアも選べる）。中身は oqrn の `data/hub-links.json` の `key: "pomoq"`。

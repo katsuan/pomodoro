@@ -20,8 +20,8 @@
     <link rel="icon" href="icon-32.png" type="image/png" sizes="32x32">
     <link rel="apple-touch-icon" href="apple-touch-icon.png">
     <!-- Q キット（おくるんの共通部品）。設定のカードの中だけで使う。色と字は style.css の :root で -->
-    <link rel="stylesheet" href="https://katsuan.github.io/line-share/shared/ui.css?v=202610261000">
-    <script src="https://katsuan.github.io/line-share/shared/ui.js?v=202610291757" defer></script>
+    <link rel="stylesheet" href="https://katsuan.github.io/oqrn/shared/ui.css?v=202610261000">
+    <script src="https://katsuan.github.io/oqrn/shared/ui.js?v=202610291757" defer></script>
     <link rel="stylesheet" href="style.css?v=202610291806">
     <link rel="manifest" href="manifest.webmanifest">
 </head>
@@ -116,7 +116,7 @@
                 <button id="settings-reset" type="button" class="ls-button"><span class="ls-icon" data-icon="undo" aria-hidden="true"></span>初期値に戻す</button>
                 <button id="settings-close" type="button" class="ls-button is-primary settings-primary">閉じる</button>
             </div>
-            <!-- 「📤 ぽもくるを紹介する」：おくるんで紹介カードを送る窓口（line-share/shared/tool-share.js。中身は line-share/data/hub-links.json） -->
+            <!-- 「📤 ぽもくるを紹介する」：おくるんで紹介カードを送る窓口（oqrn/shared/tool-share.js。中身は oqrn/data/hub-links.json） -->
             <div data-tool-share></div>
         </form>
     </div>
@@ -125,7 +125,7 @@
     <script src="js/phase.js?v=202610291806"></script>
     <script src="js/sound.js?v=202610291806"></script>
     <script src="app.js?v=202610291806"></script>
-    <script src="https://katsuan.github.io/line-share/shared/tool-share.js" data-tool="pomoq" defer></script>
+    <script src="https://katsuan.github.io/oqrn/shared/tool-share.js" data-tool="pomoq" defer></script>
 <!-- 電波がなくても開けるように（sw.js） -->
 <script>if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").catch(() => {});</script>
 </body>
